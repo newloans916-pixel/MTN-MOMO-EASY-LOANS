@@ -6,110 +6,94 @@ const axios = require('axios');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
-
-// Serve static frontend files from the "public" directory
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Optional: Meta WhatsApp Cloud API Credentials (leave as default for offline/console demo)
-const WHATSAPP_TOKEN = process.env.WHATSAPP_TOKEN || 'YOUR_META_CLOUD_API_TOKEN';
-const PHONE_NUMBER_ID = process.env.PHONE_NUMBER_ID || 'YOUR_WHATSAPP_PHONE_ID';
+// Telegram Bot API Credentials (get token from @BotFather on Telegram)
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || 'YOUR_TELEGRAM_BOT_TOKEN';
+const DEFAULT_ADMIN_CHAT_ID = process.env.TELEGRAM_CHAT_ID || 'YOUR_DEFAULT_CHAT_ID';
 
 /**
  * POST /api/loans/apply
- * Matches the fetch('/api/loans/apply') call in public/index.html
+ * Evaluates loan application and dispatches approval feedback via Telegram
  */
 app.post('/api/loans/apply', async (req, res) => {
   const {
     fullName,
     mtnMomoNumber,
-    whatsappNumber,
+    telegramPhone,
+    telegramChatId,
     loanAmount,
     repaymentMonths,
     monthlyInstallment,
     totalRepayable
   } = req.body;
 
-  // 1. Validate incoming fields
-  if (!fullName || !mtnMomoNumber || !loanAmount) {
+  // Validate required fields and 10-digit numbers
+  if (!fullName || !/^\d{10}$/.test(mtnMomoNumber) || !/^\d{10}$/.test(telegramPhone)) {
     return res.status(400).json({
       status: 'ERROR',
-      message: 'Please provide your Full Name, Registered MTN MoMo Number, and Loan Amount.'
+      message: 'Please provide your Full Name and complete 10-digit numbers for both MTN MoMo and Telegram.'
     });
   }
 
-  // 2. Demo Approval Rule (Approves loans up to 500,000; declines higher amounts for demo testing)
+  // Demo Approval Rule: Approves loans up to 500,000
   const numericAmount = Number(loanAmount);
   const isApproved = numericAmount > 0 && numericAmount <= 500000;
-  const referenceId = `MOMO-LN-${Date.now().toString().slice(-6)}`;
+  const referenceId = `MOMO-TG-${Date.now().toString().slice(-6)}`;
 
-  const decisionMessage = isApproved
-    ? `Y'ello ${fullName}! Your MTN MoMo Easy Loan of ${numericAmount.toLocaleString()} for ${repaymentMonths} month(s) is APPROVED. Monthly repayment: ${Number(monthlyInstallment).toLocaleString()} (Total: ${Number(totalRepayable).toLocaleString()}). Ref: ${referenceId}.`
-    : `Y'ello ${fullName}, your MTN MoMo Easy Loan request of ${numericAmount.toLocaleString()} was DECLINED as it exceeds the instant demo limit of 500,000. Ref: ${referenceId}.`;
+  const telegramMessage = isApproved
+    ? `✅ *MTN MoMo Easy Loan APPROVED*\n\nY'ello *${fullName}*!\n• *MoMo Account:* ${mtnMomoNumber}\n• *Telegram Phone:* ${telegramPhone}\n• *Approved Amount:* ${numericAmount.toLocaleString()}\n• *Tenure:* ${repaymentMonths} Month(s)\n• *Monthly Installment:* ${Number(monthlyInstallment).toLocaleString()}\n• *Total Repayable:* ${Number(totalRepayable).toLocaleString()}\n• *Reference ID:* \`${referenceId}\``
+    : `❌ *MTN MoMo Easy Loan DECLINED*\n\nY'ello *${fullName}*, your loan request of *${numericAmount.toLocaleString()}* exceeds the instant demo limit of 500,000.\n• *Reference ID:* \`${referenceId}\``;
 
-  // 3. Dispatch WhatsApp Feedback Notification
-  let whatsappDispatched = false;
-  const targetWhatsApp = whatsappNumber || mtnMomoNumber;
+  // Use numeric Chat ID if entered, otherwise fall back to DEFAULT_ADMIN_CHAT_ID
+  const recipientChatId = (telegramChatId && /^-?\d+$/.test(telegramChatId))
+    ? telegramChatId
+    : DEFAULT_ADMIN_CHAT_ID;
 
-  if (targetWhatsApp && WHATSAPP_TOKEN !== 'YOUR_META_CLOUD_API_TOKEN') {
+  let telegramDispatched = false;
+
+  if (TELEGRAM_BOT_TOKEN !== 'YOUR_TELEGRAM_BOT_TOKEN' && recipientChatId !== 'YOUR_DEFAULT_CHAT_ID') {
     try {
-      await sendWhatsAppNotification(targetWhatsApp, decisionMessage);
-      whatsappDispatched = true;
+      await axios.post(`https://telegram.org{TELEGRAM_BOT_TOKEN}/sendMessage`, {
+        chat_id: recipientChatId,
+        text: telegramMessage,
+        parse_mode: 'Markdown'
+      });
+      telegramDispatched = true;
     } catch (error) {
-      console.error('WhatsApp API Dispatch Error:', error.response?.data || error.message);
+      console.error('Telegram API Error:', error.response?.data || error.message);
     }
   } else {
-    // Console log for live demo verification without live Meta API keys
-    console.log('\n========================================');
-    console.log(`[DEMO WHATSAPP ALERT -> ${targetWhatsApp}]`);
-    console.log(decisionMessage);
-    console.log('========================================\n');
-    whatsappDispatched = true;
+    // Offline Demo Mode: Prints the exact Telegram message in your terminal
+    console.log('\n=================================================');
+    console.log(`[TELEGRAM BOT API DISPATCH -> Phone: ${telegramPhone} | Chat: ${telegramChatId || 'Default'}]`);
+    console.log(telegramMessage.replace(/\*/g, ''));
+    console.log('=================================================\n');
+    telegramDispatched = true;
   }
 
-  // 4. Simulate 3-second approval processing delay so the yellow spinner is visible
+  // 3-second delay so the approval spinner displays cleanly during your demo
   setTimeout(() => {
     res.json({
       status: isApproved ? 'APPROVED' : 'DECLINED',
       referenceId,
       mtnMomoNumber,
-      whatsappDispatched,
-      message: decisionMessage
+      telegramDispatched,
+      message: isApproved
+        ? `Y'ello ${fullName}! Your loan of ${numericAmount.toLocaleString()} is APPROVED for MoMo number ${mtnMomoNumber}. Feedback sent to Telegram.`
+        : `Y'ello ${fullName}, your loan of ${numericAmount.toLocaleString()} was DECLINED (exceeds 500,000 demo limit).`
     });
   }, 3000);
 });
 
-/**
- * Helper: Send real WhatsApp message via Meta Graph API
- */
-async function sendWhatsAppNotification(recipientPhone, textBody) {
-  const cleanPhone = recipientPhone.replace(/[^0-9]/g, '');
-  const url = `https://facebook.com{PHONE_NUMBER_ID}/messages`;
-
-  return axios.post(
-    url,
-    {
-      messaging_product: 'whatsapp',
-      to: cleanPhone,
-      type: 'text',
-      text: { body: textBody }
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${WHATSAPP_TOKEN}`,
-        'Content-Type': 'application/json'
-      }
-    }
-  );
-}
-
-// Fallback route to serve index.html
+// Serve index.html on all other routes
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.listen(PORT, () => {
-  console.log(`MTN MoMo Easy Loan Demo running at http://localhost:${PORT}`);
+  console.log(`MTN MoMo Navy & Telegram Demo running at http://localhost:${PORT}`);
 });
+
