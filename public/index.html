@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MTN MoMo Easy Loan Portal (Demo)</title>
+  <style>
+    :root {
+      --mtn-yellow: #FFCC00;
+      --mtn-dark-yellow: #E6B800;
+      --mtn-black: #000000;
+      --mtn-cream: #FFF9E6;
+      --mtn-gray: #F4F4F4;
+    }
+    * { box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
+    body {
+      background: linear-gradient(135deg, #1a1a1a 0%, #333333 100%);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .form-container {
+      width: 100%;
+      max-width: 740px;
+      background: #FFFFFF;
+      border: 3px solid var(--mtn-yellow);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
+    }
+    .header {
+      background-color: var(--mtn-yellow);
+      color: var(--mtn-black);
+      padding: 18px 25px;
+      border-bottom: 3px solid var(--mtn-black);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .brand-logo { display: flex; align-items: center; gap: 12px; }
+    .mtn-oval {
+      background: var(--mtn-black);
+      color: var(--mtn-yellow);
+      font-weight: 900;
+      padding: 6px 14px;
+      border-radius: 50%;
+      border: 2px solid var(--mtn-black);
+      font-size: 16px;
+      letter-spacing: 1px;
+    }
+    .header h1 { margin: 0; font-size: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .page-badge {
+      font-size: 13px;
+      font-weight: bold;
+      background: var(--mtn-black);
+      color: var(--mtn-yellow);
+      padding: 5px 12px;
+      border-radius: 20px;
+    }
+    .step-indicator {
+      display: flex;
+      background: var(--mtn-black);
+      color: #FFF;
+      font-size: 13px;
+    }
+    .step {
+      flex: 1;
+      text-align: center;
+      padding: 11px 6px;
+      border-right: 1px solid #333;
+      opacity: 0.55;
+      transition: all 0.25s ease;
+    }
+    .step.active {
+      background: #222;
+      color: var(--mtn-yellow);
+      font-weight: bold;
+      opacity: 1;
+      border-bottom: 4px solid var(--mtn-yellow);
+    }
+    .page { display: none; padding: 30px; min-height: 430px; }
+    .page.active { display: block; }
+    .welcome-hero {
+      background: linear-gradient(135deg, var(--mtn-yellow) 0%, #FFE066 100%);
+      border: 2px solid var(--mtn-black);
+      border-radius: 12px;
+      padding: 28px 25px;
+      text-align: center;
+      margin-bottom: 22px;
+    }
+    .welcome-tag {
+      display: inline-block;
+      background: var(--mtn-black);
+      color: var(--mtn-yellow);
+      font-size: 12px;
+      font-weight: bold;
+      padding: 4px 12px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .welcome-hero h2 { border: none; padding: 0; margin: 5px 0 10px 0; font-size: 28px; color: var(--mtn-black); }
+    .welcome-hero p { margin: 0 auto; max-width: 520px; font-size: 15px; color: #111; line-height: 1.5; }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 25px;
+    }
+    .feature-card {
+      background: var(--mtn-cream);
+      border: 1.5px solid var(--mtn-yellow);
+      border-radius: 10px;
+      padding: 16px 12px;
+      text-align: center;
+    }
+    .feature-icon { font-size: 26px; margin-bottom: 8px; }
+    .feature-card h4 { margin: 0 0 5px 0; font-size: 14px; color: var(--mtn-black); }
+    .feature-card p { margin: 0; font-size: 12px; color: #444; }
+    .btn-start {
+      display: block;
+      width: 100%;
+      background: var(--mtn-black);
+      color: var(--mtn-yellow);
+      font-size: 17px;
+      font-weight: bold;
+      padding: 15px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+    .btn-start:hover { background: #1f1f1f; }
+    h2.section-title {
+      border-left: 5px solid var(--mtn-yellow);
+      padding-left: 10px;
+      font-size: 18px;
+      margin-top: 0;
+    }
+    .field { margin-bottom: 16px; }
+    label { display: block; font-weight: bold; margin-bottom: 6px; font-size: 14px; }
+    input[type="text"], input[type="number"], input[type="tel"], select {
+      width: 100%;
+      padding: 12px;
+      border: 1.5px solid #CCC;
+      border-radius: 6px;
+      font-size: 15px;
+    }
+    input:focus, select:focus { border-color: var(--mtn-black); outline: none; background: var(--mtn-cream); }
+    .calc-box {
+      background: var(--mtn-cream);
+      border: 2px solid var(--mtn-yellow);
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 15px;
+    }
+    .calc-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px dashed #CCC;
+      font-size: 15px;
+    }
+    .calc-row.total {
+      border-bottom: none;
+      font-size: 18px;
+      font-weight: bold;
+      color: var(--mtn-black);
+      padding-top: 12px;
+    }
+    .btn-group { display: flex; justify-content: space-between; margin-top: 25px; }
+    button.nav-btn {
+      padding: 12px 24px;
+      font-size: 15px;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .btn-next, .btn-submit { background: var(--mtn-black); color: var(--mtn-yellow); }
+    .btn-prev { background: #E0E0E0; color: #000; }
+    .spinner-screen {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+      background: var(--mtn-cream);
+      border: 2px dashed var(--mtn-yellow);
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+    .spinner {
+      width: 68px;
+      height: 68px;
+      border: 7px solid #E0E0E0;
+      border-top: 7px solid var(--mtn-yellow);
+      border-right: 7px solid var(--mtn-black);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .status-badge {
+      display: inline-block;
+      background: var(--mtn-yellow);
+      color: var(--mtn-black);
+      font-weight: bold;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+    .footer {
+      background: var(--mtn-black);
+      color: var(--mtn-yellow);
+      text-align: center;
+      padding: 12px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    @media (max-width: 600px) { .feature-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<div class="form-container">
+  <div class="header">
+    <div class="brand-logo">
+      <div class="mtn-oval">MTN</div>
+      <div>
+        <h1>MoMo Easy Loan</h1>
+        <small style="font-weight: 600;">Everywhere You Go — Demo Portal</small>
+      </div>
+    </div>
+    <span class="page-badge" id="pageTag">Welcome</span>
+  </div>
+
+  <div class="step-indicator">
+    <div class="step active" id="tab0">Welcome</div>
+    <div class="step" id="tab1">1. Details &amp; Loan</div>
+    <div class="step" id="tab2">2. Monthly Calculator</div>
+    <div class="step" id="tab3">3. Submit &amp; Approval</div>
+  </div>
+
+  <!-- WELCOME PAGE -->
+  <div class="page active" id="page0">
+    <div class="welcome-hero">
+      <div class="welcome-tag">Y'ello! Fast &amp; Paperless Credit</div>
+      <h2>Welcome to MTN MoMo Easy Loan</h2>
+      <p>
+        Get instant financial support credited directly to your registered <strong>MTN MoMo Wallet</strong> in minutes. Simple terms, transparent monthly calculations, and real-time WhatsApp updates.
+      </p>
+    </div>
+
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h4>Instant MoMo Credit</h4>
+        <p>Funds sent straight to your active MTN mobile money wallet.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🧮</div>
+        <h4>Clear Calculator</h4>
+        <p>Preview your exact monthly repayment before you submit.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💬</div>
+        <h4>WhatsApp Feedback</h4>
+        <p>Receive instant approval alerts directly on your WhatsApp.</p>
+      </div>
+    </div>
+
+    <button class="btn-start" onclick="goToPage(1)">Start Loan Application &rarr;</button>
+  </div>
+  <!-- PAGE 1: USER DETAILS & LOAN REQUEST -->
+  <div class="page" id="page1">
+    <h2 class="section-title">Applicant &amp; Loan Request Details</h2>
+    <div class="field">
+      <label>Full Name</label>
+      <input type="text" id="fullName" placeholder="e.g., David Kamau" required />
+    </div>
+    <div class="field">
+      <label>Registered MTN MoMo Number</label>
+      <input type="tel" id="mtnNumber" placeholder="e.g., +256 77 000 0000" required />
+    </div>
+    <div class="field">
+      <label>Active WhatsApp Number (for feedback &amp; updates)</label>
+      <input type="tel" id="whatsappNumber" placeholder="e.g., +256 77 000 0000" required />
+    </div>
+    <div class="field">
+      <label>Requested Loan Amount</label>
+      <input type="number" id="loanAmount" value="50000" min="1000" oninput="calculateLoan()" />
+    </div>
+    <div class="field">
+      <label>Repayment Months</label>
+      <select id="repaymentMonths" onchange="calculateLoan()">
+        <option value="1">1 Month</option>
+        <option value="3" selected>3 Months</option>
+        <option value="6">6 Months</option>
+        <option value="12">12 Months</option>
+      </select>
+    </div>
+    <div class="btn-group">
+      <button class="nav-btn btn-prev" onclick="goToPage(0)">&larr; Welcome</button>
+      <button class="nav-btn btn-next" onclick="goToPage(2)">Next: Loan Calculator &rarr;</button>
+    </div>
+  </div>
+
+  <!-- PAGE 2: LOAN MONTHLY CALCULATOR -->
+  <div class="page" id="page2">
+    <h2 class="section-title">Loan Monthly Calculator (5% Monthly Rate)</h2>
+    <p style="font-size: 14px; color: #444;">Adjust your loan amount or repayment months below to verify your monthly installment.</p>
+    
+    <div class="field">
+      <label>Loan Amount</label>
+      <input type="number" id="calcAmountDisplay" oninput="syncFromCalc()" />
+    </div>
+    <div class="field">
+      <label>Repayment Months</label>
+      <select id="calcMonthsDisplay" onchange="syncFromCalc()">
+        <option value="1">1 Month</option>
+        <option value="3">3 Months</option>
+        <option value="6">6 Months</option>
+        <option value="12">12 Months</option>
+      </select>
+    </div>
+
+    <div class="calc-box">
+      <div class="calc-row">
+        <span>Principal Loan Amount:</span>
+        <strong id="resPrincipal">50,000</strong>
+      </div>
+      <div class="calc-row">
+        <span>Total Interest (5% / month):</span>
+        <strong id="resInterest">7,500</strong>
+      </div>
+      <div class="calc-row">
+        <span>Total Amount Repayable:</span>
+        <strong id="resTotal">57,500</strong>
+      </div>
+      <div class="calc-row total">
+        <span>Estimated Monthly Payment:</span>
+        <span style="background: var(--mtn-yellow); padding: 2px 10px; border-radius: 4px;" id="resMonthly">19,166.67 / mo</span>
+      </div>
+    </div>
+
+    <div class="btn-group">
+      <button class="nav-btn btn-prev" onclick="goToPage(1)">&larr; Back</button>
+      <button class="nav-btn btn-next" onclick="goToPage(3)">Next: Review &amp; Submit &rarr;</button>
+    </div>
+  </div>
+
+  <!-- PAGE 3: CONSENT, SPINNER & API RESULT -->
+  <div class="page" id="page3">
+    <div id="consentSection">
+      <h2 class="section-title">Applicant Consent &amp; Submission</h2>
+      <div style="background: var(--mtn-gray); padding: 16px; border-radius: 8px; border-left: 4px solid var(--mtn-black); font-size: 14px; margin-bottom: 18px;">
+        <p style="margin-top: 0;"><strong>Applicant Name:</strong> <span id="summaryName">-</span></p>
+        <p><strong>MTN MoMo Number:</strong> <span id="summaryMtn">-</span></p>
+        <p><strong>Active WhatsApp Number:</strong> <span id="summaryWa">-</span></p>
+        <p><strong>Loan Amount &amp; Tenure:</strong> <span id="summaryLoan">-</span></p>
+        <p style="margin-bottom: 0;"><strong>Monthly Repayment:</strong> <span id="summaryMonthly">-</span></p>
+      </div>
+
+      <label style="font-weight: normal; font-size: 14px; margin-bottom: 20px; cursor: pointer;">
+        <input type="checkbox" id="agreeCheck" checked /> I confirm my details are accurate and consent to receive loan approval feedback on my <strong>Active WhatsApp Number</strong>.
+      </label>
+
+      <div class="btn-group">
+        <button class="nav-btn btn-prev" onclick="goToPage(2)">&larr; Back</button>
+        <button class="nav-btn btn-submit" onclick="submitApplication()">Submit Application</button>
+      </div>
+    </div>
+
+    <!-- SPINNER WAITING FOR APPROVAL -->
+    <div class="spinner-screen" id="spinnerScreen">
+      <div class="spinner"></div>
+      <div class="status-badge">CONNECTING TO APPROVAL API...</div>
+      <h3 style="margin: 10px 0; font-size: 20px;">Verifying MTN MoMo Eligibility</h3>
+      <p style="font-size: 14px; color: #333; max-width: 460px; margin: 0 auto 15px auto;">
+        Y'ello <strong id="spinnerUserName">Applicant</strong>! Please wait while our approval engine validates your MoMo account and dispatches your status to WhatsApp.
+      </p>
+      <p style="font-size: 13px; color: #555;">
+        WhatsApp Feedback Target: <strong id="spinnerWaNumber" style="color: #000;"></strong>
+      </p>
+    </div>
+
+    <!-- API RESULT SCREEN -->
+    <div class="spinner-screen" id="resultScreen" style="display: none; border-style: solid;">
+      <div id="resultIcon" style="font-size: 48px; margin-bottom: 10px;">✅</div>
+      <div class="status-badge" id="resultBadge">APPROVED</div>
+      <h3 id="resultTitle" style="margin: 10px 0; font-size: 22px;">Loan Approved!</h3>
+      <p id="resultMessage" style="font-size: 14px; color: #333; max-width: 480px; margin: 0 auto 15px auto;"></p>
+      <div style="background: #FFF; padding: 12px; border-radius: 6px; border: 1px solid #DDD; font-size: 13px; margin-bottom: 18px;">
+        <strong>Transaction Ref:</strong> <span id="resultRef">-</span> | 
+        <strong>WhatsApp Alert:</strong> <span id="resultWaStatus">Sent</span>
+      </div>
+      <button class="nav-btn btn-next" onclick="resetDemo()">Start New Demo Application</button>
+    </div>
+  </div>
+  <div class="footer">
+    Y'ello! MTN Mobile Money Easy Loan Portal — Interactive Demo
+  </div>
+</div>
+
+<script>
+  // Connects directly to your Express server endpoint (/api/loans/apply)
+  const APPROVAL_API_URL = "/api/loans/apply";
+
+  function goToPage(pageNum) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    document.getElementById('page' + pageNum).classList.add('active');
+    document.getElementById('tab' + pageNum).classList.add('active');
+
+    const badgeLabels = ['Welcome', 'Page 1 of 3', 'Page 2 of 3', 'Page 3 of 3'];
+    document.getElementById('pageTag').innerText = badgeLabels[pageNum];
+
+    if (pageNum === 2) {
+      document.getElementById('calcAmountDisplay').value = document.getElementById('loanAmount').value;
+      document.getElementById('calcMonthsDisplay').value = document.getElementById('repaymentMonths').value;
+      calculateLoan();
+    }
+    if (pageNum === 3) {
+      updateSummary();
+    }
+  }
+
+  function syncFromCalc() {
+    document.getElementById('loanAmount').value = document.getElementById('calcAmountDisplay').value;
+    document.getElementById('repaymentMonths').value = document.getElementById('calcMonthsDisplay').value;
+    calculateLoan();
+  }
+
+  function getLoanCalculations() {
+    const amount = parseFloat(document.getElementById('loanAmount').value) || 0;
+    const months = parseInt(document.getElementById('repaymentMonths').value) || 1;
+    const interest = amount * 0.05 * months;
+    const total = amount + interest;
+    const monthly = total / months;
+    return { amount, months, interest, total, monthly };
+  }
+
+  function calculateLoan() {
+    const { amount, interest, total, monthly } = getLoanCalculations();
+    document.getElementById('resPrincipal').innerText = amount.toLocaleString();
+    document.getElementById('resInterest').innerText = interest.toLocaleString();
+    document.getElementById('resTotal').innerText = total.toLocaleString();
+    document.getElementById('resMonthly').innerText = monthly.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' / mo';
+  }
+
+  function updateSummary() {
+    const name = document.getElementById('fullName').value || 'Demo User';
+    const mtn = document.getElementById('mtnNumber').value || 'Not Provided';
+    const wa = document.getElementById('whatsappNumber').value || mtn;
+    const { amount, months, monthly } = getLoanCalculations();
+
+    document.getElementById('summaryName').innerText = name;
+    document.getElementById('summaryMtn').innerText = mtn;
+    document.getElementById('summaryWa').innerText = wa;
+    document.getElementById('summaryLoan').innerText = amount.toLocaleString() + ' (' + months + ' Months)';
+    document.getElementById('summaryMonthly').innerText = monthly.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  async function submitApplication() {
+    if (!document.getElementById('agreeCheck').checked) {
+      alert('Please tick the consent checkbox before submitting.');
+      return;
+    }
+
+    const fullName = document.getElementById('fullName').value.trim();
+    const mtnMomoNumber = document.getElementById('mtnNumber').value.trim();
+    const whatsappNumber = document.getElementById('whatsappNumber').value.trim() || mtnMomoNumber;
+
+    if (!fullName || !mtnMomoNumber) {
+      alert('Please enter your Full Name and Registered MTN MoMo Number on Page 1.');
+      goToPage(1);
+      return;
+    }
+
+    const { amount, months, monthly, total } = getLoanCalculations();
+    const payload = {
+      fullName,
+      mtnMomoNumber,
+      whatsappNumber,
+      loanAmount: amount,
+      repaymentMonths: months,
+      monthlyInstallment: Number(monthly.toFixed(2)),
+      totalRepayable: Number(total.toFixed(2))
+    };
+
+    document.getElementById('consentSection').style.display = 'none';
+    document.getElementById('spinnerUserName').innerText = payload.fullName;
+    document.getElementById('spinnerWaNumber').innerText = payload.whatsappNumber;
+    document.getElementById('spinnerScreen').style.display = 'block';
+
+    try {
+      const response = await fetch(APPROVAL_API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || 'Server error');
+      showApiResult(data, payload);
+
+    } catch (error) {
+      document.getElementById('spinnerScreen').style.display = 'none';
+      document.getElementById('consentSection').style.display = 'block';
+      alert('Approval API Error: ' + error.message);
+    }
+  }
+
+  function showApiResult(data, payload) {
+    document.getElementById('spinnerScreen').style.display = 'none';
+    const resultScreen = document.getElementById('resultScreen');
+    const approved = data.status === 'APPROVED';
+
+    document.getElementById('resultIcon').innerText = approved ? '✅' : '❌';
+    document.getElementById('resultBadge').innerText = data.status;
+    document.getElementById('resultBadge').style.background = approved ? '#FFCC00' : '#D9534F';
+    document.getElementById('resultBadge').style.color = approved ? '#000' : '#FFF';
+    document.getElementById('resultTitle').innerText = approved ? 'Easy Loan Approved!' : 'Application Declined';
+    document.getElementById('resultMessage').innerText = data.message;
+    document.getElementById('resultRef').innerText = data.referenceId;
+    document.getElementById('resultWaStatus').innerText = data.whatsappDispatched
+      ? `Sent to ${payload.whatsappNumber}`
+      : 'Logged on Server';
+
+    resultScreen.style.display = 'block';
+  }
+
+  function resetDemo() {
+    document.getElementById('resultScreen').style.display = 'none';
+    document.getElementById('consentSection').style.display = 'block';
+    goToPage(0);
+  }
+
+  calculateLoan();
+</script>
+
+</body>
+</html>
