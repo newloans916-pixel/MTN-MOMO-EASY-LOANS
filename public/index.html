@@ -93,19 +93,17 @@
         }
 
         .momo-icon-box {
-            background-color: #002b49;
-            color: var(--mtn-yellow);
-            width: 50px;
-            height: 50px;
-            border-radius: 14px 14px 14px 3px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            font-weight: 800;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            position: relative;
-        }
+    background-color: #002b49;
+    width: 52px;
+    height: 52px;
+    border-radius: 16px 16px 16px 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    flex-shrink: 0;
+}
+
 
         .momo-icon-box::after {
             content: "";
@@ -1060,12 +1058,19 @@
 <body>    
     <div class="app-container">
 
-        <!-- ================= SCREEN 1: WELCOME ================= -->
+                <!-- ================= SCREEN 1: WELCOME ================= -->
         <div id="page1" class="screen active">
             <div>
                 <div class="header-wave">
                     <div class="logo-row">
-                        <div class="momo-icon-box"><i class="fa-solid fa-play"></i></div>
+                        <div class="momo-icon-box">
+                            <svg width="30" height="30" viewBox="0 0 100 100" fill="none" xmlns="http://w3.org">
+                                <!-- Yellow Play Triangle -->
+                                <path d="M26 24 L68 50 L26 76 Z" fill="#ffcc00" stroke="#ffcc00" stroke-width="6" stroke-linejoin="round"/>
+                                <!-- Yellow Circle Node at Tip -->
+                                <circle cx="72" cy="50" r="11" fill="#ffcc00"/>
+                            </svg>
+                        </div>
                         <div class="logo-text">
                             <strong>MoMo</strong>
                             <span>from MTN</span>
@@ -1073,6 +1078,7 @@
                     </div>
                     <div class="pill-banner">MTN MOMO LOANS</div>
                 </div>
+
 
                 <div class="hero-section">
                     <div class="hero-visual">
