@@ -9,7 +9,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const ADMIN_CHAT_ID = process.env.TELEGRAM_ADMIN_CHAT_ID;
-const TELEGRAM_API = `https://telegram.org{BOT_TOKEN}`;
+const TELEGRAM_API = `https://api.telegram.org/bot${BOT_TOKEN}`;
 
 const loans = {};
 let lastUpdateId = 0;
