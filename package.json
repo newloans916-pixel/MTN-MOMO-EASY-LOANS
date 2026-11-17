@@ -1,7 +1,7 @@
 {
-  "name": "mtn-momo-easy-loan-telegram-demo",
+  "name": "mtn-momo-loans",
   "version": "1.0.0",
-  "description": "MTN MoMo Easy Loan Portal with Navy Blue UI & Telegram Approval API",
+  "description": "MTN MoMo Loans Portal with Telegram Admin Approval API",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
@@ -9,6 +9,7 @@
   "dependencies": {
     "axios": "^1.7.7",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
     "express": "^4.21.1"
   }
 }
