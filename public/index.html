@@ -33,25 +33,21 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        body {
-            background-color: #07111e;
-            background-image: radial-gradient(circle at 20% 20%, #0d2542 0%, #050c16 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
             min-height: 100vh;
-            padding: 16px;
+            background-color: var(--mtn-navy-dark);
         }
 
-        /* Main Mobile Frame Container */
+        /* Full-Page Edge-to-Edge App Container */
         .app-container {
             width: 100%;
-            max-width: 420px;
-            min-height: 780px;
+            min-height: 100vh;
             background: radial-gradient(circle at 85% 25%, var(--mtn-blue-light) 0%, var(--mtn-navy) 55%, var(--mtn-navy-dark) 100%);
-            border-radius: 26px;
-            overflow: hidden;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 204, 0, 0.25);
+            border-radius: 0;
+            overflow-x: hidden;
             position: relative;
             display: flex;
             flex-direction: column;
@@ -73,10 +69,11 @@
             z-index: 1;
         }
 
-        /* Curved Yellow Top Header */
+        /* Full-Width Curved Yellow Top Header */
         .header-wave {
+            width: 100%;
             background: linear-gradient(135deg, var(--mtn-yellow-bright) 0%, var(--mtn-yellow) 55%, var(--mtn-yellow-deep) 100%);
-            padding: 22px 20px 30px;
+            padding: 24px 20px 32px;
             border-bottom-left-radius: 50% 26px;
             border-bottom-right-radius: 50% 26px;
             border-bottom: 5px solid #fff2a6;
@@ -174,6 +171,8 @@
             flex-direction: column;
             flex-grow: 1;
             justify-content: space-between;
+            width: 100%;
+            min-height: 100vh;
             position: relative;
             z-index: 2;
             animation: fadeInScreen 0.3s ease-out;
@@ -187,6 +186,28 @@
             from { opacity: 0; transform: translateY(6px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* Keeps inner forms and cards neatly centered on wide desktop screens */
+        @media (min-width: 600px) {
+            .hero-section,
+            .sub-caption,
+            .features-row,
+            .form-header-text,
+            .form-card,
+            .wa-banner-large,
+            .bottom-trust-bar,
+            .approval-body,
+            .success-section,
+            .summary-card,
+            .cta-btn,
+            .whatsapp-box {
+                max-width: 520px;
+                width: 100%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+
         /* ================= SCREEN 1: WELCOME / LANDING ================= */
         .hero-section {
             display: flex;
